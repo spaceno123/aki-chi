@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=shift_jis">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<title>USB MIDI used PSoC1</title>
+</head>
+<body bgcolor="#c0c0e0" text="#000000" link="#0000ff" vlink="#800080" alink="#ff0000">
+<div align="center">
+<hr>
+<font size="+2">
+USB MIDI used PSoC1
+</font>
+<hr>
+USB機能付のPSoC1でUSB MIDIの実験
+</div>
+
+<br>
+<div style="padding-left:2em">
+
+<STRONG>＜概要＞</STRONG>
+<p style="padding-left:2em">
+　このコンテンツは、PSoC1を使用したUSB MIDIの実験です。<br>
+　USBのベンダIDはないので、実行バイナリの配布はありません。<br>
+　（PSoC3,PSoC5では、USB MIDIが対応された様なのだが、PSoC1での対応は？？？。）
+</p>
+
+<STRONG>＜構成＞</STRONG>
+<ul>
+<li>USBFSモジュールを使用。
+<li>UARTモジュールを使用。
+<li>VC1=SysClk/12、VC2=VC1/8として、VC2をUARTのクロックに使用。
+<li>送信ポートをOpen Drain Lowに設定して、簡略化。
+</ul>
+
+<STRONG><a name="sch">＜回路例＞</a></STRONG>
+<div style="padding-left:3em">
+<pre><tt>
+●送信
+
+                      220    4 ___________
+              +5V ---^v^v^v---|           |          
+                             2|           |          
+                          NC -| DIN(5pin) | Out      
+                      220    5| 1,3pin:NC |          
+     UART Tx Port ---^v^v^v---|___________|          
+     (Open Drain Low)
+
+●受信
+
+                    560 4 _______ 3                           5 ___________
+     UART Rx Port ---V---|       |- NC  ,----------------------|           |
+                        5|       |2     |  A   K              2|           |
+     GND ----------------| PC900 |------*---|&gt;|---,      FG ---| DIN(5pin) | In
+                        6|   _   |1               |    220    4| 1,3pin:NC |
+     +5V ----------------|__| |__|----------------*---^v^v^v---|___________|
+
+     ---|&gt;|---:diode   ---^v^v^v---:resistor   ---V---:+5V resistor pull up
+
+※ ツール工房さんのPSoC24894を使用して、なんとなく動いたので公開。（勿論、何の保証もありません。）
+</tt></pre>
+</div>
+
+<STRONG>ダウンロード</STRONG>
+<ul>
+<li><a href="../download/usbmidirev4.zip">USB MIDI used PSoC1 rev4</a>
+Last update 2023/12/24
+<br>
+<STRONG><br>配布内容</STRONG>
+<ul>
+<li>usbmidimain.c, usbmidiain.h (USB MIDI のメインルーチン)
+<li>usbmididrv.c, usbmididrv.h (USBFS, UART デバイスインターフェース)
+<li>usbmidi.c, usbmidi.h (USB MIDI データ形式変換処理)
+<li>circularbuffer.c, circularbuffer.h (UART 送受信リングバッファ)
+<li>usbmidi_descr.inc (USB MIDI descriptor, VID=0xFFFF, PID=0x0001)
+</ul>
+<STRONG><br>履歴</STRONG>
+<ul>
+<li>システム・コモン・メッセージパック化処理修正。(2023/12/24)
+<li>2バイトメッセージ受信バグ修正。(2012/10/27)
+<li><a href="./usbmidi2nd.html">PSoC3,PSoC5とファイル共通化。</a>(2012/7/21)
+<li>公開(2012/5/2)
+</ul>
+</ul>
+
+<STRONG>＜ビルド手順＞</STRONG>
+<ul>
+<li>PSoC Designer 5.2を起動してProjectを作成。
+<li>[Chip]でUSBFSとUARTを選択。（モジュール名をUSBFS、UARTにする。）
+<li>CPU_ClockをSysClk/1、VC1をSysClk/N:12、VC2をVC1/N:8に設定。
+<li>UARTを使用する端子へ接続。（送信端子はOpen Drain Lowに設定。）
+<li>UARTのクロックをVC2に設定。（RxCmdBufferはDisableで使用しない。）
+<li>Generate Configlation。
+<li>main.cのあるフォルダへダウンロードしたファイルを展開。
+<li>USBFS_desc.asmを開いて、usbmidi_desc.incのインクルードを追加。
+（下記参照、定義の二箇所を0に設定。）
+<div style="padding-left:3em">
+<CODE><br>
+WIZARD: equ <font color="red">0</font><br>
+WIZARD_DEFINED_REPORT_STORAGE: equ <font color="red">0</font><br>
+&nbsp;&nbsp;   ;--------------------------------------------------- <br>
+&nbsp;&nbsp;   ;@PSoC_UserCode_BODY_1@ (Do not change this line.)<br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   ; Insert your custom code below this banner<br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   ; Redefine the WIZARD equate to 0 below by <br>
+&nbsp;&nbsp;   ; uncommenting the WIZARD: equ 0 line <br>
+&nbsp;&nbsp;   ; to allow your custom descriptor to take effect<br>
+&nbsp;&nbsp;   ;--------------------------------------------------- <br>
+<font color="red"><br>include "usbmidi_descr.inc"<br></font><br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   ; Insert your custom code above this banner<br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   ;@PSoC_UserCode_END@ (Do not change this line.)<br>
+</CODE><br>
+</div>
+<li>展開した４組の.c,.hファイルをプロジェクトへ追加。
+<li>UARTINT.asmを開いて、割り込みルーチンの呼び出しを記述。（下記参照）
+<div style="padding-left:3em">
+<CODE><br>
+_UART_TX_ISR:<br>
+&nbsp;&nbsp;   ;@PSoC_UserCode_BODY_1@ (Do not change this line.)<br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   ; Insert your custom assembly code below this banner<br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   ;   NOTE: interrupt service routines must preserve<br>
+&nbsp;&nbsp;   ;   the values of the A and X CPU registers.<br>
+&nbsp;&nbsp;   <br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   ; Insert your custom assembly code above this banner<br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   <br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   ; Insert a lcall to a C function below this banner<br>
+&nbsp;&nbsp;   ; and un-comment the lines between these banners<br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   <br>
+&nbsp;&nbsp;   ;PRESERVE_CPU_CONTEXT<br>
+&nbsp;&nbsp;   ;lcall _My_C_Function<br>
+&nbsp;&nbsp;   ;RESTORE_CPU_CONTEXT<br>
+&nbsp;&nbsp;   <font color="red">PRESERVE_CPU_CONTEXT<br>
+&nbsp;&nbsp;   lcall _uart_tx_int<br>
+&nbsp;&nbsp;   RESTORE_CPU_CONTEXT</font><br>
+&nbsp;&nbsp;   <br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   ; Insert a lcall to a C function above this banner<br>
+&nbsp;&nbsp;   ; and un-comment the lines between these banners<br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   ;@PSoC_UserCode_END@ (Do not change this line.)<br>
+&nbsp;&nbsp;<br>
+（～～～途中省略～～～）<br>
+&nbsp;&nbsp;<br>
+_UART_RX_ISR:<br>
+&nbsp;&nbsp;<br>
+&nbsp;&nbsp;   ;@PSoC_UserCode_BODY_2@ (Do not change this line.)<br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   ; Insert your custom assembly code below this banner<br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   ;   NOTE: interrupt service routines must preserve<br>
+&nbsp;&nbsp;   ;   the values of the A and X CPU registers.<br>
+&nbsp;&nbsp;   <br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   ; Insert your custom assembly code above this banner<br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   <br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   ; Insert a lcall to a C function below this banner<br>
+&nbsp;&nbsp;   ; and un-comment the lines between these banners<br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   <br>
+&nbsp;&nbsp;   ;PRESERVE_CPU_CONTEXT<br>
+&nbsp;&nbsp;   ;lcall _My_C_Function<br>
+&nbsp;&nbsp;   ;RESTORE_CPU_CONTEXT<br>
+&nbsp;&nbsp;   <font color="red">PRESERVE_CPU_CONTEXT<br>
+&nbsp;&nbsp;   lcall _uart_rx_int<br>
+&nbsp;&nbsp;   RESTORE_CPU_CONTEXT</font><br>
+&nbsp;&nbsp;   <br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   ; Insert a lcall to a C function above this banner<br>
+&nbsp;&nbsp;   ; and un-comment the lines between these banners<br>
+&nbsp;&nbsp;   ;---------------------------------------------------<br>
+&nbsp;&nbsp;   ;@PSoC_UserCode_END@ (Do not change this line.)<br>
+</CODE><br>
+</div>
+<li>main.cのM8C_EnableGIntマクロを有効化。
+<li>main.cへusbmidimain();を追加。
+<li>Build。
+</ul>
+<p style="padding-left:3em">
+<img src="usbmidi.jpg" width="400" height="300" alt="USB MIDI 実験機">
+</p>
+
+</div>
+
+<hr>
+<div style="float:left;">
+<a href="./../../index.html">Home</a>
+&gt;
+<a href="./../PSoC.html">for PSoC</a>
+&gt;
+USB MIDI used PSoC1
+</div>
+<div style="text-align:right;">
+<!--QLOOKアクセス解析-->
+<a href="http://analytics.qlook.net/" target="_blank"><img src="http://akichi.analytics.qlook.net/counter.png" id="akichi.analytics.qlook.net" alt="QLOOKアクセス解析" width="80" height="15" border="0" /></a><script type="text/javascript" src="http://akichi.analytics.qlook.net/analyze.js" charset="UTF-8"></script><noscript><div><iframe src="http://akichi.analytics.qlook.net/analyze.html" title="QLOOKアクセス解析" style="width:0;height:0;"><img src="http://akichi.analytics.qlook.net/analyze.gif?guid=ON" alt="QLOOKアクセス解析" width="1" height="1" /></iframe></div></noscript>
+<!--/QLOOKアクセス解析-->
+</div>
+
+</body>
+
+</html>

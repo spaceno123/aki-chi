@@ -1,0 +1,247 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=shift_jis">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<title>USB MIDI used PSoC3(PSoC5)</title>
+</head>
+<body bgcolor="#c0c0e0" text="#000000" link="#0000ff" vlink="#800080" alink="#ff0000">
+<div align="center">
+<hr>
+<font size="+2">
+USB MIDI used PSoC3 &amp; PSoC5LP
+</font>
+<hr>
+USB機能付のPSoC3でのUSB MIDIの実験
+</div>
+
+<br>
+<div style="padding-left:2em">
+
+<STRONG>＜概要＞</STRONG>
+<p style="padding-left:2em">
+　このコンテンツは、PSoC3を使用したUSB MIDIの実験です。<br>
+　USBのベンダIDはないので、実行バイナリの配布はありません。<br>
+　<a href="./usbmidi.html">PSoC1の実験コード</a>をPSoC3で動かしてみた。<br>
+　（PSoC5LPにデバイスを切り替えて生成し直すだけで動いた。）<br>
+　PSoC3(PSoC5LP)にはUSB MIDIモジュールがあるが、PSoC1には用意されていないので、<br>
+　PSoC1,PSoC3,(PSoC5),PSoC5LP共通で扱えるものをということで。<br>
+　（さて、PSoC4はどうしたものか。）
+</p>
+
+<STRONG>＜構成＞</STRONG>
+<ul>
+<li>USBFSモジュールを使用。
+<li>USBFSのコンフィグレーションを利用。<br>
+(用意されているUSB MIDI APIは使わない。)
+<li>UARTモジュールを使用。<br>
+<li>Clockモジュールを使用。
+<li>送信ポートをOpen Drain Lowに設定して、簡略化。(但し、動作は未確認。)
+</ul>
+
+<STRONG>＜回路例＞</STRONG>
+<p style="padding-left:2em">
+　<a href="./usbmidi.html#sch">PSoC1の実験コードの回路例</a>をご参照ください。
+<br>
+　KIT-001を使用して、なんとなく動いたので公開。（勿論、何の保証もありません。）
+</p>
+<STRONG>ダウンロード</STRONG>
+<ul>
+<li><a href="../download/usbmidi2ndrev3.zip">USB MIDI used PSoC3 &amp; PSoC5LP</a>
+Last update 2023/12/24
+<br>
+<STRONG><br>配布内容</STRONG>
+	<ul>
+	<li>usbmidimain.c, usbmidiain.h (USB MIDI のメインルーチン)<br>
+	ビットフィールドの4ビットニブルのビット位置が異なったので書き換えと<br>
+	data変数名がNGなので書き換え。基本PSoC1と同じ。
+	<li>usbmididrv.c, usbmididrv.h (USBFS, UART デバイスインターフェース)<br>
+	PSoC3用。（PSoC5LPもそのままでOKだった。）<br>
+	<li>usbmidi.c, usbmidi.h (USB MIDI データ形式変換処理)<br>
+	ビットフィールドの4ビットニブルのビット位置が異なったので書き換えと<br>
+	data変数名がNGなので書き換え。基本PSoC1と同じ。
+	</ul>
+PSoC1のサーキュラバッファは、UARTモジュールのFIFOに置き換え、<br>
+ディスクリプタはコンフィグレーションを利用なので、配布ファイル数が少ない。<br>
+<STRONG><br>履歴</STRONG>
+<ul>
+<li>システム・コモン・メッセージパック化処理修正。(2023/12/24)
+<li>PSoC5LPで動作確認ができたので、タイトルなど修正。(2013/4/13)
+<li>2バイトメッセージ受信バグ修正。(2012/10/27)
+<li>公開(2012/7/15)
+</ul>
+</ul>
+
+<STRONG>＜ビルド手順＞</STRONG>
+<ul>
+<li>PSoC Creator 2.0を起動してProjectを作成。
+<li>TopDesignでUSBFSを配置。<br>
+<a href="01_usbfs.jpg"><img src="01_usbfs.jpg" width="180" height="139" border="0" alt="USBFSを配置"></a>
+<li>ハード設定
+	<ul>
+	<li>Pinを設定。<br>
+	<a href="02_pin.jpg"><img src="02_pin.jpg" width="180" height="89" border="0" alt="PINを設定"></a>
+	<li>Clockを設定。<br>
+	ILOを100kHz<br>
+	IMOをOSC24MHz<br>
+	USBをチェック<br>
+	PLLを48MHz<br>
+	<a href="03_clock.jpg"><img src="03_clock.jpg" width="180" height="116" border="0" alt="Clockを設定"></a>
+	</ul>
+<li>USBFSのConfigure
+	<ul>
+	<li>モジュール名をUSBFSに変更。<br>
+	<a href="04_usbfs.jpg"><img src="04_usbfs.jpg" width="180" height="133" border="0" alt="名前を変更"></a>
+	<li>Device Descriptor
+		<ul>
+		<li>Device Attributesを設定。<br>
+		Vendor ID:0xFFFF<br>
+		Product ID:0x1<br>
+		Manufacturing String:Private<br>
+		Product String:Midi Cable<br>
+		<a href="05_usbfs_device.jpg"><img src="05_usbfs_device.jpg" width="180" height="112" border="0" alt="Deviceを設定"></a>
+		<li>Configration Attributesを設定。<br>
+		Max Power (mA):100<br>
+		Device Power:Bus Powered<br>
+		Remote Wakeup:Disabled<br>
+		<a href="06_usbfs_config.jpg"><img src="06_usbfs_config.jpg" width="180" height="76" border="0" alt="Configrationを設定"></a>
+		<li>Interface Descriptorを選択して削除。<br>
+		<a href="07_usbfs_delete.jpg"><img src="07_usbfs_delete.jpg" width="180" height="136" border="0" alt="Interface Descriptorを削除"></a>
+		</ul>
+	<li>MIDI Descriptor
+		<ul>
+		<li>Enable MIDI Class APIのチェックを外す。<br>
+		<a href="08_usbfs_midi.jpg"><img src="08_usbfs_midi.jpg" width="180" height="179" border="0" alt="APIのチェックを外す"></a>
+		<li>Audio Controlを選択して追加。<br>
+		<a href="09_usbfs_midi_audio.jpg"><img src="09_usbfs_midi_audio.jpg" width="180" height="124" border="0" alt="Audio Controlを選択して追加"></a>
+			<ul>
+			<li>AC Headerを選択、設定して追加。<br>
+			bcdADCを256<br>
+			bInCollectionを1<br>
+			baInterfaceNrの[0]に1<br>
+			<a href="10_usbfs_midi_audio_header.jpg"><img src="10_usbfs_midi_audio_header.jpg" width="180" height="124" border="0" alt="AC Headerを選択して追加"></a>
+			</ul>
+		<li>MIDI DescriptorsにフォーカスしてStreamingを選択、設定して追加。<br>
+		bInterfaceNumberを1<br>
+		<a href="11_usbfs_midi_streaming.jpg"><img src="11_usbfs_midi_streaming.jpg" width="180" height="124" border="0" alt="MIDI Streamingを選択して追加"></a>
+			<ul>
+			<li>MS Headerを選択して追加。<br>
+			<a href="12_usbfs_midi_header.jpg"><img src="12_usbfs_midi_header.jpg" width="180" height="124" border="0" alt="MS Headerを選択して追加"></a>
+			<li>MIDI In Jackを選択、設定して追加。<br>
+			bJackTypeをEMBEDDED<br>
+			bJackIDを1<br>
+			<a href="13_usbfs_midi_in.jpg"><img src="13_usbfs_midi_in.jpg" width="180" height="125" border="0" alt="MIDI In Jackを選択して追加"></a>
+			<li>MIDI In Jackを選択、設定して追加。<br>
+			bJackTypeをEXTERNAL<br>
+			bJackIDを2<br>
+			<a href="14_usbfs_midi_inext.jpg"><img src="14_usbfs_midi_inext.jpg" width="180" height="125" border="0" alt="MIDI In Jackを選択して追加"></a>
+			<li>MIDI Out Jackを選択、設定して追加。<br>
+			bJackTypeをEMBEDDED<br>
+			bJackIDを3<br>
+			bNrInputPinsを1<br>
+			baSourceIDの[0]を2<br>
+			baSourcePinの[0]を1<br>
+			<a href="15_usbfs_midi_out.jpg"><img src="15_usbfs_midi_out.jpg" width="180" height="125" border="0" alt="MIDI Out Jackを選択して追加"></a>
+			<li>MIDI Out Jackを選択、設定して追加。<br>
+			bJackTypeをEXTERNAL<br>
+			bJackIDを4<br>
+			bNrInputPinsを1<br>
+			baSourceIDの[0]を1<br>
+			baSourcePinの[0]を1<br>
+			<a href="16_usbfs_midi_outext.jpg"><img src="16_usbfs_midi_outext.jpg" width="180" height="125" border="0" alt="MIDI Out Jackを選択して追加"></a>
+			<li>Endpoint Descriptorを選択、設定して追加。<br>
+			EndpointNumをEP1<br>
+			Intervalを0<br>
+			Max Packet Sizeを64<br>
+			<a href="17_usbfs_midi_ep1.jpg"><img src="17_usbfs_midi_ep1.jpg" width="180" height="125" border="0" alt="Endpoint Descriptorを選択して追加"></a>
+				<ul>
+				<li>MS Bulk Data Endpoint Descriptorを選択、設定して追加。<br>
+				bNumEmbMIDIJackを1<br>
+				baAssocJackIDの[0]を1<br>
+				<a href="18_usbfs_midi_ep1bulk.jpg"><img src="18_usbfs_midi_ep1bulk.jpg" width="180" height="125" border="0" alt="MS Bulk Data Endpoint Descriptorを選択して追加"></a>
+				</ul>
+			<li>Endpoint Descriptorを選択、設定して追加。<br>
+			EndpointNumをEP2<br>
+			DirectionをIN<br>
+			Intervalを0<br>
+			Max Packet Sizeを64<br>
+			<a href="19_usbfs_midi_ep2.jpg"><img src="19_usbfs_midi_ep2.jpg" width="180" height="125" border="0" alt="Endpoint Descriptorを選択して追加"></a>
+				<ul>
+				<li>MS Bulk Data Endpoint Descriptorを選択、設定して追加。<br>
+				bNumEmbMIDIJackを1<br>
+				baAssocJackIDの[0]を3<br>
+				<a href="20_usbfs_midi_ep2bulk.jpg"><img src="20_usbfs_midi_ep2bulk.jpg" width="180" height="125" border="0" alt="MS Bulk Data Endpoint Descriptorを選択して追加"></a>
+				</ul>
+			</ul>
+		</ul>
+	<li>Device Descriptor
+		<ul>
+		<li>Configuration Descriptorにフォーカスして<br>
+		Add Interfaceのpull downからMIDIのMIDI Interface 1を選択<br>
+		<a href="21_usbfs_interface1.jpg"><img src="21_usbfs_interface1.jpg" width="180" height="122" border="0" alt="MIDI Interface 1を選択して追加"></a>
+		<li>Configuration Descriptorにフォーカスして<br>
+		Add Interfaceのpull downからMIDIのMIDI Interface 2を選択<br>
+		<a href="22_usbfs_interface2.jpg"><img src="22_usbfs_interface2.jpg" width="180" height="122" border="0" alt="MIDI Interface 2を選択して追加"></a>
+		</ul>
+	<li>OKでConfigure終了<br>
+	<a href="23_usbfs_finish.jpg"><img src="23_usbfs_finish.jpg" width="180" height="135" border="0" alt="OKでConfigure終了"></a>
+	<br>
+	※一部ディスクリプタのトータルの長さが同じにならないのだが．．．
+	</ul>
+<li>TopDesignでUARTとClockを配置。<br>
+<a href="24_uart_clock.jpg"><img src="24_uart_clock.jpg" width="180" height="140" border="0" alt="UARTとClockを配置"></a>
+<li>ハードを設定
+	<ul>
+	<li>Pinを設定。<br>
+	<a href="25_pin_2nd.jpg"><img src="25_pin_2nd.jpg" width="180" height="89" border="0" alt="UARTのPINを設定"></a>
+	</ul>
+<li>ClockのConfigure
+	<ul>
+	<li>モジュール名をClockに変更して値を設定。<br>
+	Frequencyを250kHz<br>
+	<a href="26_clock_config.jpg"><img src="26_clock_config.jpg" width="180" height="121" border="0" alt="ClockのConfig"></a>
+	</ul>
+<li>UARTのConfigure
+	<ul>
+	<li>モジュール名をUARTに変更して値を設定。<br>
+	Advancedタブ<br>
+	External Clockを選択<br>
+	Buffer Sizeを送受信共に128<br>
+	Hardware TX-Enableのチェックを外す<br>
+	<a href="27_uart_config.jpg"><img src="27_uart_config.jpg" width="180" height="186" border="0" alt="UARTのConfig"></a>
+	</ul>
+<li>Tx_1出力ポートのConfigure
+	<ul>
+	<li>Generalタブを選択して設定。<br>
+	Open Drain, Drives Lowを選択<br>
+	<a href="28_tx_pin_config.jpg"><img src="28_tx_pin_config.jpg" width="180" height="121" border="0" alt="Tx_1出力ポートのConfigure"></a>
+	</ul>
+<li>ダウンロードしたファイルをmain.cのフォルダへ展開してプロジェクトへ追加。<br>
+<a href="29_add_files.jpg"><img src="29_add_files.jpg" width="180" height="289" border="0" alt="ファイルを追加"></a>
+<li>main.cを編集してビルド。<br>
+usbmidimain.hをインクルード<br>
+CyGlobalIntEnable;のコメントを外す。<br>
+usbmidimain()の呼び出しを追加。（行きっきりなので、forはいらないけど。）<br>
+<a href="30_main.jpg"><img src="30_main.jpg" width="180" height="122" border="0" alt="main.cを編集"></a>
+</ul>
+
+</div>
+
+<hr>
+<div style="float:left;">
+<a href="./../../index.html">Home</a>
+&gt;
+<a href="./../PSoC.html">for PSoC</a>
+&gt;
+USB MIDI used PSoC3 &amp; PSoC5LP
+</div>
+<div style="text-align:right;">
+<!--QLOOKアクセス解析-->
+<a href="http://analytics.qlook.net/" target="_blank"><img src="http://akichi.analytics.qlook.net/counter.png" id="akichi.analytics.qlook.net" alt="QLOOKアクセス解析" width="80" height="15" border="0" /></a><script type="text/javascript" src="http://akichi.analytics.qlook.net/analyze.js" charset="UTF-8"></script><noscript><div><iframe src="http://akichi.analytics.qlook.net/analyze.html" title="QLOOKアクセス解析" style="width:0;height:0;"><img src="http://akichi.analytics.qlook.net/analyze.gif?guid=ON" alt="QLOOKアクセス解析" width="1" height="1" /></iframe></div></noscript>
+<!--/QLOOKアクセス解析-->
+</div>
+
+</body>
+
+</html>

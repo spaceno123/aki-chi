@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=shift_jis">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<title>38.4kbps to 31.25kbps convertor used AKI-H8</title>
+</head>
+<body bgcolor="#c0c0e0" text="#000000" link="#0000ff" vlink="#800080" alink="#ff0000">
+<div align="center">
+<hr>
+<font size="+2">
+38.4kbps to 31.25kbps convertor used AKI-H8
+</font>
+<hr>
+秋月で発売されているマイコンボード AKI-H8 を使って、
+転送レート変換（38.4kbps ＜－＞ 31.25kbps）をするだけ．．．
+</div>
+
+<br>
+<div style="padding-left:2em">
+<STRONG>＜概要＞</STRONG>
+<p style="padding-left:2em">
+　このプログラムは、ＲＳ－２３２Ｃポートの３８．４ｋｂｐｓ
+の転送レートを３１．２５ｋｂｐｓの転送レートにレート変換する
+だけのものです。３８．４ｋｂｐｓから３１．２５ｋｂｐｓへの変換
+では、オーバーフローすることもありますので、ご注意ください。
+<br>　また、AE-H8MB を前提として未接続端子は全て出力ポートにし
+ていますので、未接続端子を結線されている方は使用しないでください。
+（ソースを公開する程の複雑なコードではありませんので．．．）
+</p>
+
+<STRONG>＜機能＞</STRONG>
+<ul>
+<li>RXD1の38.4kbpsの受信データをTXD0に31.25kbpsで送出
+<li>RXD1の受信をLED1で表示
+<li>RXD1の受信データチャンネルをLCD上段に表示
+<li>RXD0の31.25kbpsの受信データをTXD1に38.4kbpsで送出
+<li>RXD0の受信をLED2で表示
+<li>RXD0の受信データチャンネルをLCD下段に表示
+</ul>
+
+<STRONG>＜参考＞</STRONG>
+<ul>
+<li>31.25kbps 側の回路例
+<br>　（下記回路は、規格に合致していません
+ので、各自の責任においてご使用ください。最悪、接続した先の機器
+を破壊する恐れがあります。）
+<pre>
+<tt>
+●送信
+
+_________   A     K   560    4 ___________
+TXD0(4-7) ---(|&gt;|)---^v^v^v---|           |          
+                             2|           |          
+                          NC -| DIN(5pin) | Out      
+                      220    5| 1,3pin:NC |          
+ GND(4-2) -----------^v^v^v---|___________|          
+
+●受信
+
+_________   560  Inv  560 4 _______ 3                           5 ___________
+RXD0(4-5) ---V---o&lt;|---V---|       |- NC  *----------------------|           |
+                          5|       |2     |  A   K              2|           |
+ GND(4-2) -----------------| PC900 |------*---|&gt;|---*      FG ---| DIN(5pin) | In
+                          6|   _   |1               |    220    4| 1,3pin:NC |
+ +5V(4-3) -----------------|__| |__|----------------*---^v^v^v---|___________|
+
+---(|&gt;|)---:DI or LED      ----|&gt;|----:DI            ----o&lt;|----:invertor 
+
+---^v^v^v--:resistor       -----V-----:+5V pull up
+</tt>
+</pre>
+
+</ul>
+
+<STRONG>ダウンロード</STRONG>
+<ul>
+<li><a href="../download/rsmid02.lzh">38.4kbps to 31.25kbps convertor Ver. 0.02</a>
+(rsmid.mot) up date 1999/5/23
+</ul>
+
+</div>
+
+<hr>
+<div style="float:left;">
+<a href="./../../index.html">Home</a>
+&gt;
+<a href="./../3048.html">for AKI-H8 (H8/300H)</a>
+&gt;
+38.4kbps to 31.25kbps convertor used AKI-H8
+</div>
+<!--<img src="/cgi-bin/Count.cgi?sh=N|df=akichi.count4.dat">-->
+<div style="text-align:right;">
+<!--QLOOKアクセス解析-->
+<a href="http://analytics.qlook.net/" target="_blank"><img src="http://akichi.analytics.qlook.net/counter.png" id="akichi.analytics.qlook.net" alt="QLOOKアクセス解析" width="80" height="15" border="0" /></a><script type="text/javascript" src="http://akichi.analytics.qlook.net/analyze.js" charset="UTF-8"></script><noscript><div><iframe src="http://akichi.analytics.qlook.net/analyze.html" title="QLOOKアクセス解析" style="width:0;height:0;"><img src="http://akichi.analytics.qlook.net/analyze.gif?guid=ON" alt="QLOOKアクセス解析" width="1" height="1" /></iframe></div></noscript>
+<!--/QLOOKアクセス解析-->
+</div>
+
+</body>
+
+</html>

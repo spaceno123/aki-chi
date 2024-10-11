@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=shift_jis">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<title>LPT JTAG</title>
+</head>
+<body bgcolor="#c0c0e0" text="#000000" link="#0000ff" vlink="#800080" alink="#ff0000">
+<div align="center">
+<hr>
+<font size="+2">
+LPT JTAG
+</font>
+<hr>
+先ずは LPT JTAG を作ってみた。
+</div>
+
+<br>
+<div style="padding-left:2em">
+
+<STRONG>＜概要＞</STRONG>
+<p style="padding-left:2em">
+LPT JTAG for ARM Debug
+</p>
+
+<STRONG>＜機能＞</STRONG>
+<ul>
+<li>openOCD の parport.cfg で wiggler2 を選択すれば使える。
+</ul>
+
+<STRONG>＜参考＞</STRONG>
+<ul>
+<li>LPT JTAG 回路例 [wiggler2 で公開されている回路をアレンジした]
+<br>
+<br>
+（実の所、xilinx のダウンロードケーブルの自作用で購入していたパーツを流用。）
+<pre>
+<tt>
+D-Sub25 (Amphenol36)              ,------------------------,       1  2   
+    1 o-( 1)                      | ,-|~|_|~|---*------|&lt;|-+-----*-----,
+14 o----(14)          220   ,-----+-+-|     |-, |          |     '-o o-'
+    2 o-( 2)---------^v^v^v-+-,   '-+-| 74  |-+-+---,  100 '-------o o-,
+15 o----(32)--#       220   | |     *-| HC  |-+-+---+-^v^v^v-------o o-*
+    3 o-( 3)---------^v^v^v-+-+-----+-| 125 |-* |   |        ,-----o o-*
+16 o----(31)          220   | |   ,-+-|     |-+-+-, |  100   | ,---o o-*
+    4 o-( 4)---------^v^v^v-+-+-, | *-|_____|-+-+-+-+-^v^v^v-+-'   o o-*
+17 o----(36)          220   | | '-+-+---------+-+-' |        | ,---o o-*
+    5 o-( 5)---------^v^v^v-+-+---+-+---------+-+---'  100   | | ,-o o-*
+18 o----(19)          220   | |   '-+---------+-+-----^v^v^v-' | | o o-*
+    6 o-( 6)---------^v^v^v-' |     *---------' |              | | o o-*
+19 o----(20,21)----,  220     |     *----||-----*              | |     |
+    7 o-( 7)-------+-^v^v^v-, |     |   0.47uF  |      100     | |19 20|
+20 o----(22,23)----*        | |   ,-+-----------+-----^v^v^v---' |     |
+    8 o-( 8)--#    |        | '---+-+---------, |                |     |
+21 o----(24,25)----*        |     | *-|~|_|~|-+-*-^v^v^v-(|&gt;|)-, |     |
+    9 o-( 9)       |        '-----+-+-|     |-' |   220        | |     |
+22 o----(26,27,28)-*-(|&lt;|)-^v^v^v-+-+-| 74  |---'              | |     |
+   10 o-(10)       |         220  | *-| HC  |-*-^v^v^v-*-------' |     |
+23 o----(29)-------*              '-+-| 125 |-'   1k   |         |     |
+   11 o-(11)-------+----------------+-|     |-,        |         |     |
+24 o               |                *-|_____|-+--------+---------'     |
+   12 o-(12)       |                |         |        |               |
+25 o----(30)-------*----------------*---------*--------*---------------'
+   13 o-(13)                                                            
+
+   A    K               A   K
+---(|&gt;|)---:LED      ----|&gt;|----:DI      ---^v^v^v--:resistor      --||--:capacitor
+
+※ #-#を結線すると、wiggler互換かも。（未確認）
+
+※※ なんとなく動いたので公開。（勿論、何の保証もありません。）
+</tt>
+</pre>
+
+</ul>
+
+</div>
+
+<hr>
+<div style="float:left;">
+<a href="./../../index.html">Home</a>
+&gt;
+<a href="./../ARM.html">for ARM7TDMI (ADuC7026 &amp; LPC2388)</a>
+&gt;
+LPT JTAG
+</div>
+<!--<img src="/cgi-bin/Count.cgi?sh=N|df=akichi.count4.dat">-->
+<div style="text-align:right;">
+<!--QLOOKアクセス解析-->
+<a href="http://analytics.qlook.net/" target="_blank"><img src="http://akichi.analytics.qlook.net/counter.png" id="akichi.analytics.qlook.net" alt="QLOOKアクセス解析" width="80" height="15" border="0" /></a><script type="text/javascript" src="http://akichi.analytics.qlook.net/analyze.js" charset="UTF-8"></script><noscript><div><iframe src="http://akichi.analytics.qlook.net/analyze.html" title="QLOOKアクセス解析" style="width:0;height:0;"><img src="http://akichi.analytics.qlook.net/analyze.gif?guid=ON" alt="QLOOKアクセス解析" width="1" height="1" /></iframe></div></noscript>
+<!--/QLOOKアクセス解析-->
+</div>
+
+</body>
+
+</html>
