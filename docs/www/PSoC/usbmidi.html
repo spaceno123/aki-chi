@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang="ja">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=shift_jis">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <meta http-equiv="Content-Script-Type" content="text/javascript">
 <title>USB MIDI used PSoC1</title>
@@ -13,31 +13,31 @@
 USB MIDI used PSoC1
 </font>
 <hr>
-USB‹@”\•t‚ÌPSoC1‚ÅUSB MIDI‚ÌŽÀŒ±
+USBæ©Ÿèƒ½ä»˜ã®PSoC1ã§USB MIDIã®å®Ÿé¨“
 </div>
 
 <br>
 <div style="padding-left:2em">
 
-<STRONG>ƒŠT—v„</STRONG>
+<STRONG>ï¼œæ¦‚è¦ï¼ž</STRONG>
 <p style="padding-left:2em">
-@‚±‚ÌƒRƒ“ƒeƒ“ƒc‚ÍAPSoC1‚ðŽg—p‚µ‚½USB MIDI‚ÌŽÀŒ±‚Å‚·B<br>
-@USB‚Ìƒxƒ“ƒ_ID‚Í‚È‚¢‚Ì‚ÅAŽÀsƒoƒCƒiƒŠ‚Ì”z•z‚Í‚ ‚è‚Ü‚¹‚ñB<br>
-@iPSoC3,PSoC5‚Å‚ÍAUSB MIDI‚ª‘Î‰ž‚³‚ê‚½—l‚È‚Ì‚¾‚ªAPSoC1‚Å‚Ì‘Î‰ž‚ÍHHHBj
+ã€€ã“ã®ã‚³ãƒ³ãƒ†ãƒ³ãƒ„ã¯ã€PSoC1ã‚’ä½¿ç”¨ã—ãŸUSB MIDIã®å®Ÿé¨“ã§ã™ã€‚<br>
+ã€€USBã®ãƒ™ãƒ³ãƒ€IDã¯ãªã„ã®ã§ã€å®Ÿè¡Œãƒã‚¤ãƒŠãƒªã®é…å¸ƒã¯ã‚ã‚Šã¾ã›ã‚“ã€‚<br>
+ã€€ï¼ˆPSoC3,PSoC5ã§ã¯ã€USB MIDIãŒå¯¾å¿œã•ã‚ŒãŸæ§˜ãªã®ã ãŒã€PSoC1ã§ã®å¯¾å¿œã¯ï¼Ÿï¼Ÿï¼Ÿã€‚ï¼‰
 </p>
 
-<STRONG>ƒ\¬„</STRONG>
+<STRONG>ï¼œæ§‹æˆï¼ž</STRONG>
 <ul>
-<li>USBFSƒ‚ƒWƒ…[ƒ‹‚ðŽg—pB
-<li>UARTƒ‚ƒWƒ…[ƒ‹‚ðŽg—pB
-<li>VC1=SysClk/12AVC2=VC1/8‚Æ‚µ‚ÄAVC2‚ðUART‚ÌƒNƒƒbƒN‚ÉŽg—pB
-<li>‘—Mƒ|[ƒg‚ðOpen Drain Low‚ÉÝ’è‚µ‚ÄAŠÈ—ª‰»B
+<li>USBFSãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’ä½¿ç”¨ã€‚
+<li>UARTãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’ä½¿ç”¨ã€‚
+<li>VC1=SysClk/12ã€VC2=VC1/8ã¨ã—ã¦ã€VC2ã‚’UARTã®ã‚¯ãƒ­ãƒƒã‚¯ã«ä½¿ç”¨ã€‚
+<li>é€ä¿¡ãƒãƒ¼ãƒˆã‚’Open Drain Lowã«è¨­å®šã—ã¦ã€ç°¡ç•¥åŒ–ã€‚
 </ul>
 
-<STRONG><a name="sch">ƒ‰ñ˜H—á„</a></STRONG>
+<STRONG><a name="sch">ï¼œå›žè·¯ä¾‹ï¼ž</a></STRONG>
 <div style="padding-left:3em">
 <pre><tt>
-œ‘—M
+â—é€ä¿¡
 
                       220    4 ___________
               +5V ---^v^v^v---|           |          
@@ -47,7 +47,7 @@ USB‹@”\•t‚ÌPSoC1‚ÅUSB MIDI‚ÌŽÀŒ±
      UART Tx Port ---^v^v^v---|___________|          
      (Open Drain Low)
 
-œŽóM
+â—å—ä¿¡
 
                     560 4 _______ 3                           5 ___________
      UART Rx Port ---V---|       |- NC  ,----------------------|           |
@@ -58,43 +58,43 @@ USB‹@”\•t‚ÌPSoC1‚ÅUSB MIDI‚ÌŽÀŒ±
 
      ---|&gt;|---:diode   ---^v^v^v---:resistor   ---V---:+5V resistor pull up
 
-¦ ƒc[ƒ‹H–[‚³‚ñ‚ÌPSoC24894‚ðŽg—p‚µ‚ÄA‚È‚ñ‚Æ‚È‚­“®‚¢‚½‚Ì‚ÅŒöŠJBi–Ü˜_A‰½‚Ì•ÛØ‚à‚ ‚è‚Ü‚¹‚ñBj
+â€» ãƒ„ãƒ¼ãƒ«å·¥æˆ¿ã•ã‚“ã®PSoC24894ã‚’ä½¿ç”¨ã—ã¦ã€ãªã‚“ã¨ãªãå‹•ã„ãŸã®ã§å…¬é–‹ã€‚ï¼ˆå‹¿è«–ã€ä½•ã®ä¿è¨¼ã‚‚ã‚ã‚Šã¾ã›ã‚“ã€‚ï¼‰
 </tt></pre>
 </div>
 
-<STRONG>ƒ_ƒEƒ“ƒ[ƒh</STRONG>
+<STRONG>ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰</STRONG>
 <ul>
 <li><a href="../download/usbmidirev4.zip">USB MIDI used PSoC1 rev4</a>
 Last update 2023/12/24
 <br>
-<STRONG><br>”z•z“à—e</STRONG>
+<STRONG><br>é…å¸ƒå†…å®¹</STRONG>
 <ul>
-<li>usbmidimain.c, usbmidiain.h (USB MIDI ‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“)
-<li>usbmididrv.c, usbmididrv.h (USBFS, UART ƒfƒoƒCƒXƒCƒ“ƒ^[ƒtƒF[ƒX)
-<li>usbmidi.c, usbmidi.h (USB MIDI ƒf[ƒ^Œ`Ž®•ÏŠ·ˆ—)
-<li>circularbuffer.c, circularbuffer.h (UART ‘—ŽóMƒŠƒ“ƒOƒoƒbƒtƒ@)
+<li>usbmidimain.c, usbmidiain.h (USB MIDI ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³)
+<li>usbmididrv.c, usbmididrv.h (USBFS, UART ãƒ‡ãƒã‚¤ã‚¹ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹)
+<li>usbmidi.c, usbmidi.h (USB MIDI ãƒ‡ãƒ¼ã‚¿å½¢å¼å¤‰æ›å‡¦ç†)
+<li>circularbuffer.c, circularbuffer.h (UART é€å—ä¿¡ãƒªãƒ³ã‚°ãƒãƒƒãƒ•ã‚¡)
 <li>usbmidi_descr.inc (USB MIDI descriptor, VID=0xFFFF, PID=0x0001)
 </ul>
-<STRONG><br>—š—ð</STRONG>
+<STRONG><br>å±¥æ­´</STRONG>
 <ul>
-<li>ƒVƒXƒeƒ€EƒRƒ‚ƒ“EƒƒbƒZ[ƒWƒpƒbƒN‰»ˆ—C³B(2023/12/24)
-<li>2ƒoƒCƒgƒƒbƒZ[ƒWŽóMƒoƒOC³B(2012/10/27)
-<li><a href="./usbmidi2nd.html">PSoC3,PSoC5‚Æƒtƒ@ƒCƒ‹‹¤’Ê‰»B</a>(2012/7/21)
-<li>ŒöŠJ(2012/5/2)
+<li>ã‚·ã‚¹ãƒ†ãƒ ãƒ»ã‚³ãƒ¢ãƒ³ãƒ»ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ‘ãƒƒã‚¯åŒ–å‡¦ç†ä¿®æ­£ã€‚(2023/12/24)
+<li>2ãƒã‚¤ãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å—ä¿¡ãƒã‚°ä¿®æ­£ã€‚(2012/10/27)
+<li><a href="./usbmidi2nd.html">PSoC3,PSoC5ã¨ãƒ•ã‚¡ã‚¤ãƒ«å…±é€šåŒ–ã€‚</a>(2012/7/21)
+<li>å…¬é–‹(2012/5/2)
 </ul>
 </ul>
 
-<STRONG>ƒƒrƒ‹ƒhŽè‡„</STRONG>
+<STRONG>ï¼œãƒ“ãƒ«ãƒ‰æ‰‹é †ï¼ž</STRONG>
 <ul>
-<li>PSoC Designer 5.2‚ð‹N“®‚µ‚ÄProject‚ðì¬B
-<li>[Chip]‚ÅUSBFS‚ÆUART‚ð‘I‘ðBiƒ‚ƒWƒ…[ƒ‹–¼‚ðUSBFSAUART‚É‚·‚éBj
-<li>CPU_Clock‚ðSysClk/1AVC1‚ðSysClk/N:12AVC2‚ðVC1/N:8‚ÉÝ’èB
-<li>UART‚ðŽg—p‚·‚é’[Žq‚ÖÚ‘±Bi‘—M’[Žq‚ÍOpen Drain Low‚ÉÝ’èBj
-<li>UART‚ÌƒNƒƒbƒN‚ðVC2‚ÉÝ’èBiRxCmdBuffer‚ÍDisable‚ÅŽg—p‚µ‚È‚¢Bj
-<li>Generate ConfiglationB
-<li>main.c‚Ì‚ ‚éƒtƒHƒ‹ƒ_‚Öƒ_ƒEƒ“ƒ[ƒh‚µ‚½ƒtƒ@ƒCƒ‹‚ð“WŠJB
-<li>USBFS_desc.asm‚ðŠJ‚¢‚ÄAusbmidi_desc.inc‚ÌƒCƒ“ƒNƒ‹[ƒh‚ð’Ç‰ÁB
-i‰º‹LŽQÆA’è‹`‚Ì“ñ‰ÓŠ‚ð0‚ÉÝ’èBj
+<li>PSoC Designer 5.2ã‚’èµ·å‹•ã—ã¦Projectã‚’ä½œæˆã€‚
+<li>[Chip]ã§USBFSã¨UARTã‚’é¸æŠžã€‚ï¼ˆãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«åã‚’USBFSã€UARTã«ã™ã‚‹ã€‚ï¼‰
+<li>CPU_Clockã‚’SysClk/1ã€VC1ã‚’SysClk/N:12ã€VC2ã‚’VC1/N:8ã«è¨­å®šã€‚
+<li>UARTã‚’ä½¿ç”¨ã™ã‚‹ç«¯å­ã¸æŽ¥ç¶šã€‚ï¼ˆé€ä¿¡ç«¯å­ã¯Open Drain Lowã«è¨­å®šã€‚ï¼‰
+<li>UARTã®ã‚¯ãƒ­ãƒƒã‚¯ã‚’VC2ã«è¨­å®šã€‚ï¼ˆRxCmdBufferã¯Disableã§ä½¿ç”¨ã—ãªã„ã€‚ï¼‰
+<li>Generate Configlationã€‚
+<li>main.cã®ã‚ã‚‹ãƒ•ã‚©ãƒ«ãƒ€ã¸ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’å±•é–‹ã€‚
+<li>USBFS_desc.asmã‚’é–‹ã„ã¦ã€usbmidi_desc.incã®ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ã‚’è¿½åŠ ã€‚
+ï¼ˆä¸‹è¨˜å‚ç…§ã€å®šç¾©ã®äºŒç®‡æ‰€ã‚’0ã«è¨­å®šã€‚ï¼‰
 <div style="padding-left:3em">
 <CODE><br>
 WIZARD: equ <font color="red">0</font><br>
@@ -115,8 +115,8 @@ WIZARD_DEFINED_REPORT_STORAGE: equ <font color="red">0</font><br>
 &nbsp;&nbsp;   ;@PSoC_UserCode_END@ (Do not change this line.)<br>
 </CODE><br>
 </div>
-<li>“WŠJ‚µ‚½‚S‘g‚Ì.c,.hƒtƒ@ƒCƒ‹‚ðƒvƒƒWƒFƒNƒg‚Ö’Ç‰ÁB
-<li>UARTINT.asm‚ðŠJ‚¢‚ÄAŠ„‚èž‚Ýƒ‹[ƒ`ƒ“‚ÌŒÄ‚Ño‚µ‚ð‹LqBi‰º‹LŽQÆj
+<li>å±•é–‹ã—ãŸï¼”çµ„ã®.c,.hãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã¸è¿½åŠ ã€‚
+<li>UARTINT.asmã‚’é–‹ã„ã¦ã€å‰²ã‚Šè¾¼ã¿ãƒ«ãƒ¼ãƒãƒ³ã®å‘¼ã³å‡ºã—ã‚’è¨˜è¿°ã€‚ï¼ˆä¸‹è¨˜å‚ç…§ï¼‰
 <div style="padding-left:3em">
 <CODE><br>
 _UART_TX_ISR:<br>
@@ -149,7 +149,7 @@ _UART_TX_ISR:<br>
 &nbsp;&nbsp;   ;---------------------------------------------------<br>
 &nbsp;&nbsp;   ;@PSoC_UserCode_END@ (Do not change this line.)<br>
 &nbsp;&nbsp;<br>
-i```“r’†È—ª```j<br>
+ï¼ˆï½žï½žï½žé€”ä¸­çœç•¥ï½žï½žï½žï¼‰<br>
 &nbsp;&nbsp;<br>
 _UART_RX_ISR:<br>
 &nbsp;&nbsp;<br>
@@ -183,12 +183,12 @@ _UART_RX_ISR:<br>
 &nbsp;&nbsp;   ;@PSoC_UserCode_END@ (Do not change this line.)<br>
 </CODE><br>
 </div>
-<li>main.c‚ÌM8C_EnableGIntƒ}ƒNƒ‚ð—LŒø‰»B
-<li>main.c‚Öusbmidimain();‚ð’Ç‰ÁB
-<li>BuildB
+<li>main.cã®M8C_EnableGIntãƒžã‚¯ãƒ­ã‚’æœ‰åŠ¹åŒ–ã€‚
+<li>main.cã¸usbmidimain();ã‚’è¿½åŠ ã€‚
+<li>Buildã€‚
 </ul>
 <p style="padding-left:3em">
-<img src="usbmidi.jpg" width="300" height="400" alt="USB MIDI ŽÀŒ±‹@" style="transform:rotate(270deg);>
+<img src="usbmidi.jpg" width="300" height="400" alt="USB MIDI å®Ÿé¨“æ©Ÿ" style="transform:rotate(270deg);>
 </p>
 
 </div>
@@ -202,11 +202,11 @@ _UART_RX_ISR:<br>
 USB MIDI used PSoC1
 </div>
 <div style="text-align:right;">
-<!--QLOOKƒAƒNƒZƒX‰ðÍ-->
+<!--QLOOKã‚¢ã‚¯ã‚»ã‚¹è§£æž-->
 <!--
-<a href="http://analytics.qlook.net/" target="_blank"><img src="http://akichi.analytics.qlook.net/counter.png" id="akichi.analytics.qlook.net" alt="QLOOKƒAƒNƒZƒX‰ðÍ" width="80" height="15" border="0" /></a><script type="text/javascript" src="http://akichi.analytics.qlook.net/analyze.js" charset="UTF-8"></script><noscript><div><iframe src="http://akichi.analytics.qlook.net/analyze.html" title="QLOOKƒAƒNƒZƒX‰ðÍ" style="width:0;height:0;"><img src="http://akichi.analytics.qlook.net/analyze.gif?guid=ON" alt="QLOOKƒAƒNƒZƒX‰ðÍ" width="1" height="1" /></iframe></div></noscript>
+<a href="http://analytics.qlook.net/" target="_blank"><img src="http://akichi.analytics.qlook.net/counter.png" id="akichi.analytics.qlook.net" alt="QLOOKã‚¢ã‚¯ã‚»ã‚¹è§£æž" width="80" height="15" border="0" /></a><script type="text/javascript" src="http://akichi.analytics.qlook.net/analyze.js" charset="UTF-8"></script><noscript><div><iframe src="http://akichi.analytics.qlook.net/analyze.html" title="QLOOKã‚¢ã‚¯ã‚»ã‚¹è§£æž" style="width:0;height:0;"><img src="http://akichi.analytics.qlook.net/analyze.gif?guid=ON" alt="QLOOKã‚¢ã‚¯ã‚»ã‚¹è§£æž" width="1" height="1" /></iframe></div></noscript>
 -->
-<!--/QLOOKƒAƒNƒZƒX‰ðÍ-->
+<!--/QLOOKã‚¢ã‚¯ã‚»ã‚¹è§£æž-->
 </div>
 
 </body>
