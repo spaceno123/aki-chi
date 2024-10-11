@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang="ja">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=shift_jis">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <meta http-equiv="Content-Script-Type" content="text/javascript">
 <title>real time micro kernel for AKI-H8</title>
@@ -13,62 +13,62 @@
 real time micro kernel for AKI-H8
 </font>
 <hr>
-�H���Ŕ�������Ă���}�C�R���{�[�h AKI-H8 �����A
-�g�ݍ��݌^���A���^�C��(?)�E�}�C�N���E�J�[�l��
+秋月で発売されているマイコンボード AKI-H8 向け、
+組み込み型リアルタイム(?)・マイクロ・カーネル
 </div>
 
 <br>
 <div style="padding-left:2em">
-<STRONG>���T�v��</STRONG>
+<STRONG>＜概要＞</STRONG>
 <p style="padding-left:2em">
-�@���̃J�[�l���́A�ʂh�s�q�n�m�R�D�O��ڎw���č쐬���Ă��܂����A���x���q�ɒB���Ă��Ȃ��̂Ńʂh�s�q�n�m�R�D�O�Ƃ͌Ăׂ܂���B
-�����Ƃ��A���\�I�Ƀ��A���^�C�����Ɍ����Ă���̂ŁA�ʂh�s�q�n�m�R�D�O�ƌĂׂ���͗��Ȃ��ł��傤�B
-�܂��A�����[�X�O�D�O�V�������ĂЂƂ܂��I���ł��B�i���e�I�ɂ͂O�D�O�U���̕������肵�Ă��܂����j���́A�ʂh�s�q�n�m�S�D�O�����炩�D�D�D
+　このカーネルは、μＩＴＲＯＮ３．０を目指して作成していますが、レベルＲに達していないのでμＩＴＲＯＮ３．０とは呼べません。
+もっとも、性能的にリアルタイム性に欠けているので、μＩＴＲＯＮ３．０と呼べる日は来ないでしょう。
+また、リリース０．０７をもってひとまず終了です。（内容的には０．０６ｃの方が安定していますが）次は、μＩＴＲＯＮ４．０だからか．．．
 </p>
 
-<STRONG>�������i���_�I�j��</STRONG>
+<STRONG>＜特徴（欠点！）＞</STRONG>
 <ul>
-<li>�R���e�L�X�g�؂�ւ����Ԃ������i�A���Ԃ͕s���B�j
-<li>�����݋֎~���Ԃ������i�A���Ԃ͕s���B�j
-<li>�J�[�l���̃X�^�b�N����ʂ������i�A�ʂ͕s���B�j
-<li>�b�o�t�̂b�b�q���W�X�^����ȊO��AKI-H8�p�b����݂̂ŋL�q�i���Ă��܂����A�\�[�X�R�[�h�̌��J�\��́D�D�D�j
+<li>コンテキスト切り替え時間が長い（、時間は不明。）
+<li>割込み禁止時間が長い（、時間は不明。）
+<li>カーネルのスタック消費量が多い（、量は不明。）
+<li>ＣＰＵのＣＣＲレジスタ操作以外をAKI-H8用Ｃ言語のみで記述（していますが、ソースコードの公開予定は．．．）
 </ul>
 
-<STRONG>���T�|�[�g�V�X�e���R�[����</STRONG>
+<STRONG>＜サポートシステムコール＞</STRONG>
 <ul>
-<li>���x���q�C�q�m
+<li>レベルＲ，ＲＮ
 <br>dis_dsp, ena_dsp, slp_tsk, loc_cpu, unl_cpu, ret_int, wup_tsk
-<li>���x���r�C�r�m
+<li>レベルＳ，ＳＮ
 <br>ext_tsk, rot_rdq, get_tid, dly_tsk, sta_tsk, ter_tsk, can_wup
-<li>���x���d�C�d�m
+<li>レベルＥ，ＥＮ
 <br>exd_tsk, tslp_tsk, ref_sys, cre_tsk, ret_wup
-<li>���x���b
+<li>レベルＣ
 <br>def_exc, def_int
 </ul>
 <p style="padding-left:2em">
-�������ӁI�@�ڑ��@�\�̓T�|�[�g���Ă��܂���B�܂��A�قƂ�ǃf�o�b�O���Ă��܂���B
+※ご注意！　接続機能はサポートしていません。また、ほとんどデバッグしていません。
 </p>
 
-<STRONG>���z�z���e��</STRONG>
+<STRONG>＜配布内容＞</STRONG>
 <ul>
-<li>�J�[�l���̃I�u�W�F�N�g�t�@�C���ƃw�b�_�ƃ}�j���A���ikernel.obj, kernel.h, kernel.htm�j
-<li>�b�o�t�̂b�b�q����I�u�W�F�N�g�t�@�C���ƃw�b�_�imachine.obj, machine.h�j
-<li>AKI-H8�}�U�[�{�[�h�ł̃T���v���ilcddrv.obj, lcddrv.h, setup.mar, system.h, ioregs.h, main.c, makefile�j
+<li>カーネルのオブジェクトファイルとヘッダとマニュアル（kernel.obj, kernel.h, kernel.htm）
+<li>ＣＰＵのＣＣＲ操作オブジェクトファイルとヘッダ（machine.obj, machine.h）
+<li>AKI-H8マザーボードでのサンプル（lcddrv.obj, lcddrv.h, setup.mar, system.h, ioregs.h, main.c, makefile）
 </ul>
 
-<STRONG>�_�E�����[�h</STRONG>
+<STRONG>ダウンロード</STRONG>
 <ul>
 <li><a href="../download/rtmk007a.lzh">real time micro kernel Rel. 0.07a</a>
 up date 2000/2/27
-<br>�i�}�j���A��
+<br>（マニュアル
 <a href="./kernel.html">kernel.html</a>
-�́A��L�C�����Ő����X�V���Ă��܂��B�j
+は、誤記修正等で随時更新しています。）
 <!--
 <li><a href="../download/rtmk006c.lzh">real time micro kernel Rel. 0.06c</a>
 up date 1999/5/23
-<br>�i�O�����[�X�ł��B�j--></ul>
+<br>（前リリースです。）--></ul>
 
-<STRONG>�\�[�X�R�[�h�͂����炩�灄</STRONG>
+<STRONG>ソースコードはこちらから＞</STRONG>
 <a href="./srtmk.html">real time micro kernel Rel. 0.07a source code<br></a>
 <br>
 
@@ -84,11 +84,11 @@ real time micro kernel for AKI-H8
 </div>
 <!--<img src="/cgi-bin/Count.cgi?sh=N|df=akichi.count3.dat">-->
 <div style="text-align:right;">
-<!--QLOOK�A�N�Z�X���-->
+<!--QLOOKアクセス解析-->
 <!--
-<a href="http://analytics.qlook.net/" target="_blank"><img src="http://akichi.analytics.qlook.net/counter.png" id="akichi.analytics.qlook.net" alt="QLOOK�A�N�Z�X���" width="80" height="15" border="0" /></a><script type="text/javascript" src="http://akichi.analytics.qlook.net/analyze.js" charset="UTF-8"></script><noscript><div><iframe src="http://akichi.analytics.qlook.net/analyze.html" title="QLOOK�A�N�Z�X���" style="width:0;height:0;"><img src="http://akichi.analytics.qlook.net/analyze.gif?guid=ON" alt="QLOOK�A�N�Z�X���" width="1" height="1" /></iframe></div></noscript>
+<a href="http://analytics.qlook.net/" target="_blank"><img src="http://akichi.analytics.qlook.net/counter.png" id="akichi.analytics.qlook.net" alt="QLOOKアクセス解析" width="80" height="15" border="0" /></a><script type="text/javascript" src="http://akichi.analytics.qlook.net/analyze.js" charset="UTF-8"></script><noscript><div><iframe src="http://akichi.analytics.qlook.net/analyze.html" title="QLOOKアクセス解析" style="width:0;height:0;"><img src="http://akichi.analytics.qlook.net/analyze.gif?guid=ON" alt="QLOOKアクセス解析" width="1" height="1" /></iframe></div></noscript>
 -->
-<!--/QLOOK�A�N�Z�X���-->
+<!--/QLOOKアクセス解析-->
 </div>
 
 </body>

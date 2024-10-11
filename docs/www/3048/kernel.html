@@ -1,363 +1,363 @@
-<html><head><title>kernel manual</title></head>
+<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>kernel manual</title></head>
 <body bgcolor="#c0c0e0">
 <pre>
 <h1>
-�g�ݍ��݌^���A���^�C���E�}�C�N���E�J�[�l��</h1>
+組み込み型リアルタイム・マイクロ・カーネル</h1>
 <br>
-<h2>	�y�T�v�z</h2><br>
-	�@���̃J�[�l���́A�ʂh�s�q�n�m�R�D�O��ڎw���č쐬���Ă��܂����A
-	���x���q�ɒB���Ă��Ȃ��̂ŁA�ʂh�s�q�n�m�R�D�O�Ƃ͌Ăׂ܂���B
-	�����Ƃ��A���\�I�Ƀ��A���^�C�����Ɍ����Ă���̂ŁA�ʂh�s�q�n�m�R�D�O
-	�ƌĂׂ���͗��Ȃ��ł��傤�B
-	�܂��A�����[�X�O�D�O�V�������ĂЂƂ܂��I���ł��B�i���e�I�ɂ͂O�D�O�U��
-	�̕������肵�Ă��܂����j���́A�ʂh�s�q�n�m�S�D�O�����炩�D�D�D
+<h2>	【概要】</h2><br>
+	　このカーネルは、μＩＴＲＯＮ３．０を目指して作成していますが、
+	レベルＲに達していないので、μＩＴＲＯＮ３．０とは呼べません。
+	もっとも、性能的にリアルタイム性に欠けているので、μＩＴＲＯＮ３．０
+	と呼べる日は来ないでしょう。
+	また、リリース０．０７をもってひとまず終了です。（内容的には０．０６ｃ
+	の方が安定していますが）次は、μＩＴＲＯＮ４．０だからか．．．
 <br>
-<h2>	�y�ڎ��z</h2><br>
-<h3>	�P�D������� <a href="#part1">��</a>
+<h2>	【目次】</h2><br>
+<h3>	１．動作条件 <a href="#part1">▽</a>
 
-	�Q�D�T�|�[�g�V�X�e���R�[�� <a href="#part2">��</a>
+	２．サポートシステムコール <a href="#part2">▽</a>
 
-	�R�D�g�p���@ <a href="#part3">��</a>
-	�@3- 1. �J�[�l���N�� (vini_rtmk) <a href="#part31">��</a>
-	�@3- 2. �^�X�N���� (cre_tsk) <a href="#part32">��</a>
-	�@3- 3. �^�X�N�N�� (sta_tsk) <a href="#part33">��</a>
-	�@3- 4. �f�B�X�p�b�`�֎~ (dis_dsp) <a href="#part34">��</a>
-	�@3- 5. �f�B�X�p�b�`���� (ena_dsp) <a href="#part35">��</a>
-	�@3- 6. �^�X�N�̃��f�B�L���[��] (rot_rdq) <a href="#part36">��</a>
-	�@3- 7. ���^�X�N�̃^�X�N�h�c�Q�� (get_tid) <a href="#part37">��</a>
-	�@3- 8. ���^�X�N���N���҂���Ԃֈڍs (slp_tsk,tslp_tsk) <a href="#part38">��</a>
-	�@3- 9. ���^�X�N�̋N�� (wup_tsk) <a href="#part39">��</a>
-	�@3-10. ���荞�݃n���h�����畜�A (ret_int) <a href="#part310">��</a>
-	�@3-11. ���荞�݂ƃf�B�X�p�b�`�֎~ (loc_cpu) <a href="#part311">��</a>
-	�@3-12. ���荞�݂ƃf�B�X�p�b�`���� (unl_cpu) <a href="#part312">��</a>
-	�@3-13. �^�X�N�x�� (dly_tsk) <a href="#part313">��</a>
-	�@3-14. �V�X�e����ԎQ�� (ref_sys) <a href="#part314">��</a>
-	�@3-15. ���^�X�N�I�� (ext_tsk) <a href="#part315">��</a>
-	�@3-16. ���^�X�N�̏I���ƍ폜 (exd_tsk) <a href="#part316">��</a>
-	�@3-17. ��O�n���h����` (def_exc) <a href="#part317">��</a>
-	�@3-18. ���^�X�N�����I�� (ter_tsk) <a href="#part318">��</a>
-	�@3-19. �^�X�N�̋N���v���𖳌��� (can_wup) <a href="#part319">��</a>
-	  3-20. ���荞�݃n���h�����A�ƃ^�X�N�N�� (ret_wup) <a href="#part320">��</a>
-	  3-21. ���荞�݃n���h����` (def_int) <a href="#part321">��</a>
+	３．使用方法 <a href="#part3">▽</a>
+	　3- 1. カーネル起動 (vini_rtmk) <a href="#part31">▽</a>
+	　3- 2. タスク生成 (cre_tsk) <a href="#part32">▽</a>
+	　3- 3. タスク起動 (sta_tsk) <a href="#part33">▽</a>
+	　3- 4. ディスパッチ禁止 (dis_dsp) <a href="#part34">▽</a>
+	　3- 5. ディスパッチ許可 (ena_dsp) <a href="#part35">▽</a>
+	　3- 6. タスクのレディキュー回転 (rot_rdq) <a href="#part36">▽</a>
+	　3- 7. 自タスクのタスクＩＤ参照 (get_tid) <a href="#part37">▽</a>
+	　3- 8. 自タスクを起床待ち状態へ移行 (slp_tsk,tslp_tsk) <a href="#part38">▽</a>
+	　3- 9. 他タスクの起床 (wup_tsk) <a href="#part39">▽</a>
+	　3-10. 割り込みハンドラから復帰 (ret_int) <a href="#part310">▽</a>
+	　3-11. 割り込みとディスパッチ禁止 (loc_cpu) <a href="#part311">▽</a>
+	　3-12. 割り込みとディスパッチ許可 (unl_cpu) <a href="#part312">▽</a>
+	　3-13. タスク遅延 (dly_tsk) <a href="#part313">▽</a>
+	　3-14. システム状態参照 (ref_sys) <a href="#part314">▽</a>
+	　3-15. 自タスク終了 (ext_tsk) <a href="#part315">▽</a>
+	　3-16. 自タスクの終了と削除 (exd_tsk) <a href="#part316">▽</a>
+	　3-17. 例外ハンドラ定義 (def_exc) <a href="#part317">▽</a>
+	　3-18. 他タスク強制終了 (ter_tsk) <a href="#part318">▽</a>
+	　3-19. タスクの起床要求を無効化 (can_wup) <a href="#part319">▽</a>
+	  3-20. 割り込みハンドラ復帰とタスク起床 (ret_wup) <a href="#part320">▽</a>
+	  3-21. 割り込みハンドラ定義 (def_int) <a href="#part321">▽</a>
 
-	�S�D�z�z���e <a href="#part4">��</a>
-	�@4- 1. �J�[�l�� <a href="#part41">��</a>
-	�@4- 2. �b�o�t�̂b�b�q����֐� <a href="#part42">��</a>
-	�@4- 3. �k�b�c�\���h���C�o <a href="#part43">��</a>
-	�@4- 4. �Z�b�g�A�b�v <a href="#part44">��</a>
-	�@4- 5. �T���v���t�@�C�� <a href="#part45">��</a>
+	４．配布内容 <a href="#part4">▽</a>
+	　4- 1. カーネル <a href="#part41">▽</a>
+	　4- 2. ＣＰＵのＣＣＲ操作関数 <a href="#part42">▽</a>
+	　4- 3. ＬＣＤ表示ドライバ <a href="#part43">▽</a>
+	　4- 4. セットアップ <a href="#part44">▽</a>
+	　4- 5. サンプルファイル <a href="#part45">▽</a>
 
-	�T�D�g�ݍ��ݎ菇 <a href="#part5">��</a>
+	５．組み込み手順 <a href="#part5">▽</a>
 
-	�U�D���ӎ��� <a href="#part6">��</a>
+	６．注意事項 <a href="#part6">▽</a>
 
-	�V�D���̑� <a href="#part7">��</a>
+	７．その他 <a href="#part7">▽</a>
 </h3><br>
 <a name="part1"></a>
-<h2>	�P�D�������
+<h2>	１．動作条件
 </h2>
-	�@AKI-H8�}�C�R����p�b�R���p�C���iC38HAB.LIB�������N�j
-	�@�^�C�}�[���P�`�����l���g�p�i�P���r�����C���^�[�o���p�j
+	　AKI-H8マイコン専用Ｃコンパイラ（C38HAB.LIBをリンク）
+	　タイマーを１チャンネル使用（１ｍＳｅｃインターバル用）
 
-	�@���f�B�X�p�b�`�ɂ́Asetjmp, longjmp ���g�p���Ă��܂��B
-	�@�@C38HAB.LIB �̃o�[�W�����ɂ���ẮA�R�[�h���قȂ�ꍇ��
-	�@�@���邩������܂���B���̏ꍇ�́A���삵�܂���̂ŁA����
-	�@�@�Ă��������B�isetjmp, longjmp �ɍ��킹�āA�J�[�l�����č\
-	�@�@�z����K�v������̂ł����A�\�[�X�̒񋟂͂���܂���B�j
+	　※ディスパッチには、setjmp, longjmp を使用しています。
+	　　C38HAB.LIB のバージョンによっては、コードが異なる場合が
+	　　あるかもしれません。その場合は、動作しませんので、諦め
+	　　てください。（setjmp, longjmp に合わせて、カーネルを再構
+	　　築する必要があるのですが、ソースの提供はありません。）
 
 <a name="part2"></a>
-<h2>	�Q�D�T�|�[�g�V�X�e���R�[��
+<h2>	２．サポートシステムコール
 </h2>
-	���x���q�C�q�m
+	レベルＲ，ＲＮ
 
 		dis_dsp, ena_dsp, slp_tsk, loc_cpu, unl_cpu, ret_int, wup_tsk
 
-	���x���r�C�r�m
+	レベルＳ，ＳＮ
 
 		ext_tsk, rot_rdq, get_tid, dly_tsk, sta_tsk, ter_tsk, can_wup
 
-	���x���d�C�d�m
+	レベルＥ，ＥＮ
 
 		exd_tsk, tslp_tsk, ref_sys, cre_tsk, ret_wup
 
-	���x���b
+	レベルＣ
 
 		def_exc, def_int
 
-	�������ӁI�@�ڑ��@�\�̓T�|�[�g���Ă��܂���B�܂��A�قƂ�ǃf�o�b�O����
-	���܂���B
+	※ご注意！　接続機能はサポートしていません。また、ほとんどデバッグして
+	いません。
 
 <a name="part3"></a>
-<h2>	�R�D�g�p���@
+<h2>	３．使用方法
 </h2>
-	�@���̃J�[�l���́A�p�[�\�i�����f�B�A���甭������Ă���
-	�u�ʂh�s�q�n�m�R�D�O�W���n���h�u�b�N����V�Łv
-	�����Ƃɍ쐬���Ă��܂��B�V�X�e���R�[�����̎g�p���@�́A�������
-	�Q�Ƃ��Ă��������B
+	　このカーネルは、パーソナルメディアから発売されている
+	「μＩＴＲＯＮ３．０標準ハンドブック改定新版」
+	をもとに作成しています。システムコール等の使用方法は、そちらを
+	参照してください。
 
 <a name="part31"></a>
-<h3>	3-1. �J�[�l���N�� (vini_rtmk)
+<h3>	3-1. カーネル起動 (vini_rtmk)
 </h3>
-	�@vini_rtmk:	Vender Initialize Real Time Micro Kernel
+	　vini_rtmk:	Vender Initialize Real Time Micro Kernel
 
-	�y�p�����[�^�z
+	【パラメータ】
 
-	�@ID		tskid	TaskId			�^�X�N�h�c
-	�@T_CTSK*	pk_ctsk	Packet to Create Task	�^�X�N�������
+	　ID		tskid	TaskId			タスクＩＤ
+	　T_CTSK*	pk_ctsk	Packet to Create Task	タスク生成情報
 
-	pk_ctsk�̓��e
+	pk_ctskの内容
 
-	�@VP		exinf	Extended Information	�g�����
-	�@ATR		tskatr	TaskAttribute		�^�X�N����
-	�@FP		task	TaskStartAddress	�^�X�N�N���A�h���X
-	�@PRI		itskpri	InitialTaskPriority	�^�X�N�N�����D��x
-	�@INT		stksz	StackSize		�X�^�b�N�T�C�Y(�o�C�g��)
-	�@�|�i���ȉ��͂s�b�a�Ƃ��ăJ�[�l�����g�p����̈悪����j�|
+	　VP		exinf	Extended Information	拡張情報
+	　ATR		tskatr	TaskAttribute		タスク属性
+	　FP		task	TaskStartAddress	タスク起動アドレス
+	　PRI		itskpri	InitialTaskPriority	タスク起動時優先度
+	　INT		stksz	StackSize		スタックサイズ(バイト数)
+	　－（☆以下はＴＣＢとしてカーネルが使用する領域がある）－
 
-	�y���^�[���p�����[�^�z
+	【リターンパラメータ】
 
-	�@ER		ercd	ErrorCode		�G���[�R�[�h
+	　ER		ercd	ErrorCode		エラーコード
 
-	�y����z
+	【解説】
 
-	�@tskid�Ŏw�肵��ID�ԍ��������[�U�[�^�X�N�����ݎ��s���̏�ԂƂ���
-	��������Ɠ����ɁA�J�[�l���̏��������s���܂��B
-	�@�Ώۃ^�X�N�͐�����ARUN��ԂƂȂ�܂��B
+	　tskidで指定したID番号を持つユーザータスクを現在実行中の状態として
+	生成すると同時に、カーネルの初期化を行います。
+	　対象タスクは生成後、RUN状態となります。
 
-	�����̓_�� cre_tsk �ɏ����Ă��܂��̂ŁA�n���h�u�b�N�����Q�Ƃ��������B
+	※他の点は cre_tsk に準じていますので、ハンドブックをご参照ください。
 
-	�y�⑫�����z
+	【補足事項】
 
-	�@SETUP.MAR ����Amain ���R�[���������_�ł͂܂��A�J�[�l���͓��삵��
-	���܂���BT_CTSK �\���̂��m�ۂ��āA�p�����[�^���Z�b�g���Ă���A
-	vini_rtmk ���R�[�����܂��B
+	　SETUP.MAR から、main をコールした時点ではまだ、カーネルは動作して
+	いません。T_CTSK 構造体を確保して、パラメータをセットしてから、
+	vini_rtmk をコールします。
 
         /* rtmk initialize */
-        main_task.exinf = NULL;			/* �g�����i���w��j */
-        main_task.tskatr = TA_HLNG;		/* �Ώۃ^�X�N���������� */
-        main_task.task = main;			/* �X�^�[�g�A�h���X */
-        main_task.itskpri = 8;			/* �^�X�N�D�揇�� */
-        main_task.stksz = 512;			/* �X�^�b�N���蓖�ăT�C�Y */
+        main_task.exinf = NULL;			/* 拡張情報（未指定） */
+        main_task.tskatr = TA_HLNG;		/* 対象タスクが高級言語 */
+        main_task.task = main;			/* スタートアドレス */
+        main_task.itskpri = 8;			/* タスク優先順位 */
+        main_task.stksz = 512;			/* スタック割り当てサイズ */
         if ( vini_rtmk( MAIN_TASK, &main_task ) != E_OK )
 		return -1;
 
-	�@vini_rtmk �ł́A���ݎ��s���̏�Ԃ��P�^�X�N�Ƃ��đg�ݍ���ŁA
-	�J�[�l���̎g�p����^�C�}�[���N�����܂��B
+	　vini_rtmk では、現在実行中の状態を１タスクとして組み込んで、
+	カーネルの使用するタイマーを起動します。
 
-	�@�����Ŏg�p���� T_CTSK �\���̂́A�J�[�l���N����ɃJ�[�l�������̂�
-	�܎Q�Ƃ��Ă��܂��i�s�b�a�����̍\���̂Ɋ܂܂�Ă��܂��j�̂ŁA���̃^
-	�X�N�̓o�^�ɂ́A�ʓr T_CTSK �\���̂��m�ۂ���K�v������܂��B
+	　ここで使用した T_CTSK 構造体は、カーネル起動後にカーネルがそのま
+	ま参照しています（ＴＣＢがこの構造体に含まれています）ので、他のタ
+	スクの登録には、別途 T_CTSK 構造体を確保する必要があります。
 
-	�@�J�[�l���̎Q�Ƃ���A�h���X�����X�^�[�g�A�b�v���Œ�`���Ă��������B
-	�@_ITUx		�J�[�l���Ɋ��蓖�Ă�h�s�t�̃A�h���X���`���܂��B
-	�@(ITU0:H'ffff64,ITU1:H'ffff6e,ITU2:ffff78,ITU3:H'ffff82,ITU4:H'ffff92)
-	�@_CNT1mS	�P���r�����̃V�X�e���N���b�N�ł̃J�E���g�l���`���܂��B
-	�@_STKtop	�X�^�b�N�G���A�̍ŉ��ʃA�h���X���`���܂��B
-	�@_STKini	�X�^�b�N�G���A�̍ŏ�ʃA�h���X�{�P���`���܂��B
+	　カーネルの参照するアドレス等をスタートアップ等で定義してください。
+	　_ITUx		カーネルに割り当てるＩＴＵのアドレスを定義します。
+	　(ITU0:H'ffff64,ITU1:H'ffff6e,ITU2:ffff78,ITU3:H'ffff82,ITU4:H'ffff92)
+	　_CNT1mS	１ｍＳｅｃのシステムクロックでのカウント値を定義します。
+	　_STKtop	スタックエリアの最下位アドレスを定義します。
+	　_STKini	スタックエリアの最上位アドレス＋１を定義します。
 
 	        .section        C, DATA, ALIGN=2
 	        .export _ITUx, _CNT1mS, _STKtop, _STKini
-	_ITUx   .data.l H'ffff6e        ; �J�[�l���̎g�p����h�s�t���`�i�h�s�t�P�j
-	_CNT1mS .data.w 16000           ; 1mSec �̃J�E���g�����`�i�Ӂ��P�U�l�g���j
-	_STKtop .data.l startof S       ; �X�^�b�N�J�n�A�h���X
-	_STKini .data.l stack           ; ���蓖�ăX�^�b�N�����l
+	_ITUx   .data.l H'ffff6e        ; カーネルの使用するＩＴＵを定義（ＩＴＵ１）
+	_CNT1mS .data.w 16000           ; 1mSec のカウント数を定義（φ＝１６ＭＨｚ）
+	_STKtop .data.l startof S       ; スタック開始アドレス
+	_STKini .data.l stack           ; 割り当てスタック初期値
 
-	�y�G���[�R�[�h(ercd)�z
+	【エラーコード(ercd)】
 
-	�@E_OK		����I��
-	�@E_SYS		�V�X�e���G���[�i���ɃJ�[�l���������ς݁j
-	�@E_ID		�s��ID�ԍ��itskid���s���j
-	�@E_PAR		�p�����[�^�G���[�itask,itskpri,stksz���s���j
+	　E_OK		正常終了
+	　E_SYS		システムエラー（既にカーネル初期化済み）
+	　E_ID		不正ID番号（tskidが不正）
+	　E_PAR		パラメータエラー（task,itskpri,stkszが不正）
 
 <a name="part32"></a>
-<h3>	3-2. �^�X�N���� (cre_tsk)
+<h3>	3-2. タスク生成 (cre_tsk)
 </h3>
-	�y�G���[�R�[�h(ercd)�z
+	【エラーコード(ercd)】
 
-	�@E_OK		����I��
-	�@E_SYS		�V�X�e���G���[�i�J�[�l��������������Ă��Ȃ��j
-	�@E_ID		�s��ID�ԍ��itskid���s���j
-	�@E_PAR		�p�����[�^�G���[�itask,itskpri,stksz���s���j
+	　E_OK		正常終了
+	　E_SYS		システムエラー（カーネルが初期化されていない）
+	　E_ID		不正ID番号（tskidが不正）
+	　E_PAR		パラメータエラー（task,itskpri,stkszが不正）
 
-	�����̓_�́A�n���h�u�b�N�����Q�Ƃ��������B
+	※他の点は、ハンドブックをご参照ください。
 
 <a name="part33"></a>
-<h3>	3-3. �^�X�N�N�� (sta_tsk)
+<h3>	3-3. タスク起動 (sta_tsk)
 </h3>
-	�y�G���[�R�[�h(ercd)�z
+	【エラーコード(ercd)】
 
-	�@E_OK		����I��
-	�@E_ID		�s��ID�ԍ��itskid���s���j
-	�@E_NOEXS	�I�u�W�F�N�g�����݂��Ă��Ȃ�
-	�@E_OBJ		�I�u�W�F�N�g�̏�Ԃ��s��
+	　E_OK		正常終了
+	　E_ID		不正ID番号（tskidが不正）
+	　E_NOEXS	オブジェクトが存在していない
+	　E_OBJ		オブジェクトの状態が不正
 
-	�����̓_�́A�n���h�u�b�N�����Q�Ƃ��������B
+	※他の点は、ハンドブックをご参照ください。
 
 <a name="part34"></a>
-<h3>	3-4. �f�B�X�p�b�`�֎~ (dis_dsp)
+<h3>	3-4. ディスパッチ禁止 (dis_dsp)
 </h3>
-	���n���h�u�b�N�����Q�Ƃ��������B
+	※ハンドブックをご参照ください。
 
 <a name="part35"></a>
-<h3>	3-5. �f�B�X�p�b�`���� (ena_dsp)
+<h3>	3-5. ディスパッチ許可 (ena_dsp)
 </h3>
-	���n���h�u�b�N�����Q�Ƃ��������B
+	※ハンドブックをご参照ください。
 
 <a name="part36"></a>
-<h3>	3-6. �^�X�N�̃��f�B�L���[��] (rot_rdq)
+<h3>	3-6. タスクのレディキュー回転 (rot_rdq)
 </h3>
-	�y�⑫�����z
+	【補足事項】
 
-	�@�^�X�N�Ɨ������� rot_rdq(tskid=TPRI_RUN)�𔭍s�����ꍇ�́A����
-	�����s���̃^�X�N���܂ރ��f�B�L���[����]���܂��B�f�B�X�p�b�`���x
-	������Ă����Ԃɂ����ẮA�f�B�X�p�b�`�����s����钼�O�̎��s��
-	�̃^�X�N���܂ރ��f�B�[�L���[�̉�]�ƂȂ�܂��B
+	　タスク独立部から rot_rdq(tskid=TPRI_RUN)を発行した場合は、その
+	時実行中のタスクを含むレディキューを回転します。ディスパッチが遅
+	延されている状態においては、ディスパッチが発行される直前の実行中
+	のタスクを含むレディーキューの回転となります。
 
-	�����̓_�́A�n���h�u�b�N�����Q�Ƃ��������B
+	※他の点は、ハンドブックをご参照ください。
 
 <a name="part37"></a>
-<h3>	3-7. ���^�X�N�̃^�X�N�h�c�Q�� (get_tid)
+<h3>	3-7. 自タスクのタスクＩＤ参照 (get_tid)
 </h3>
-	���n���h�u�b�N�����Q�Ƃ��������B
+	※ハンドブックをご参照ください。
 
 <a name="part38"></a>
-<h3>	3-8. ���^�X�N���N���҂���Ԃֈڍs (slp_tsk,tslp_tsk)
+<h3>	3-8. 自タスクを起床待ち状態へ移行 (slp_tsk,tslp_tsk)
 </h3>
-	���n���h�u�b�N�����Q�Ƃ��������B
+	※ハンドブックをご参照ください。
 
 <a name="part39"></a>
-<h3>	3-9. ���^�X�N�̋N�� (wup_tsk)
+<h3>	3-9. 他タスクの起床 (wup_tsk)
 </h3>
-	�y�G���[�R�[�h(ercd)�z
+	【エラーコード(ercd)】
 
-	�@E_OK		����I��
-	�@E_ID		�s��ID�ԍ��itskid���s���j
-	�@E_NOEXS	�I�u�W�F�N�g�����݂��Ă��Ȃ�
-	�@E_OBJ		�I�u�W�F�N�g�̏�Ԃ��s��
-	�@E_OACV	�L���[�C���O�܂��̓l�X�g�̃I�[�o�[�t���[
+	　E_OK		正常終了
+	　E_ID		不正ID番号（tskidが不正）
+	　E_NOEXS	オブジェクトが存在していない
+	　E_OBJ		オブジェクトの状態が不正
+	　E_OACV	キューイングまたはネストのオーバーフロー
 
-	�����̓_�́A�n���h�u�b�N�����Q�Ƃ��������B
+	※他の点は、ハンドブックをご参照ください。
 
 <a name="part310"></a>
-<h3>	3-10. ���荞�݃n���h�����畜�A (ret_int)
+<h3>	3-10. 割り込みハンドラから復帰 (ret_int)
 </h3>
-	�y�⑫�����z
+	【補足事項】
 
-	a)rel.0.06c �܂łɓK�p
+	a)rel.0.06c までに適用
 
-        �@ret_int �͒P�Ȃ� return ���ɂȂ��Ă��܂����A���ݎg�����͂���
-        �܂���B
+        　ret_int は単なる return 文になっていますが、現在使い道はあり
+        ません。
 
-	b)rel.0.07�ɓK�p
+	b)rel.0.07に適用
 	
-	�@ret_int ���A�P�Ȃ� return ������f�B�X�p�b�`���s�֐��ɂ����
-	�܂����B�������A���荞�݃n���h���̐擪�i�����݋֎~��ԁj�ŁA
-	vbgn_int ���R�[�����邱�Ƃ��K�{�ł��B
+	　ret_int が、単なる return 文からディスパッチ実行関数にかわり
+	ました。ただし、割り込みハンドラの先頭（割込み禁止状態）で、
+	vbgn_int をコールすることが必須です。
 
-	�����̓_�́A�n���h�u�b�N�����Q�Ƃ��������B
+	※他の点は、ハンドブックをご参照ください。
 
 <a name="part311"></a>
-<h3>	3-11. ���荞�݂ƃf�B�X�p�b�`�֎~ (loc_cpu)
+<h3>	3-11. 割り込みとディスパッチ禁止 (loc_cpu)
 </h3>
-	���n���h�u�b�N�����Q�Ƃ��������B
+	※ハンドブックをご参照ください。
 
 <a name="part312"></a>
-<h3>	3-12. ���荞�݂ƃf�B�X�p�b�`���� (unl_cpu)
+<h3>	3-12. 割り込みとディスパッチ許可 (unl_cpu)
 </h3>
-	���n���h�u�b�N�����Q�Ƃ��������B
+	※ハンドブックをご参照ください。
 
 <a name="part313"></a>
-<h3>	3-13. �^�X�N�x�� (dly_tsk)
+<h3>	3-13. タスク遅延 (dly_tsk)
 </h3>
-	���n���h�u�b�N�����Q�Ƃ��������B
+	※ハンドブックをご参照ください。
 
 <a name="part314"></a>
-<h3>	3-14. �V�X�e����ԎQ�� (ref_sys)
+<h3>	3-14. システム状態参照 (ref_sys)
 </h3>
-	�y�G���[�R�[�h(ercd)�z
+	【エラーコード(ercd)】
 
-	�@E_OK		����I��
-	�@E_SYS		�V�X�e���G���[�i�J�[�l��������������Ă��Ȃ��j
-	�@E_PAR		�p�����[�^�G���[
+	　E_OK		正常終了
+	　E_SYS		システムエラー（カーネルが初期化されていない）
+	　E_PAR		パラメータエラー
 
-	�����̓_�́A�n���h�u�b�N�����Q�Ƃ��������B
+	※他の点は、ハンドブックをご参照ください。
 
 <a name="part315"></a>
-<h3>	3-15. ���^�X�N�I�� (ext_tsk)
+<h3>	3-15. 自タスク終了 (ext_tsk)
 </h3>
-	�y�⑫�����z
+	【補足事項】
 
-	�@���̃^�X�N���A�N�e�B�u�ɂȂ�܂ŁA�X�^�b�N�̈�̓J�[�l�����g�p
-	���Ă��܂��B
+	　他のタスクがアクティブになるまで、スタック領域はカーネルが使用
+	しています。
 
-	�����̓_�́A�n���h�u�b�N�����Q�Ƃ��������B
+	※他の点は、ハンドブックをご参照ください。
 
 <a name="part316"></a>
-<h3>	3-16. ���^�X�N�̏I���ƍ폜 (exd_tsk)
+<h3>	3-16. 自タスクの終了と削除 (exd_tsk)
 </h3>
-	�y�⑫�����z
+	【補足事項】
 
-	�@���̃^�X�N���A�N�e�B�u�ɂȂ�܂ŁA�X�^�b�N�̈�̓J�[�l�����g�p
-	���Ă��܂��B
+	　他のタスクがアクティブになるまで、スタック領域はカーネルが使用
+	しています。
 
-	�����̓_�́A�n���h�u�b�N�����Q�Ƃ��������B
+	※他の点は、ハンドブックをご参照ください。
 
 <a name="part317"></a>
-<h3>	3-17. ��O�n���h����` (def_exc)
+<h3>	3-17. 例外ハンドラ定義 (def_exc)
 </h3>
-	�y�⑫�����z
+	【補足事項】
 
-	�@��`�\�ȗ�O�n���h���́Ater_tsk �ɂ��^�X�N�̏I���n���h����
-	�݂ł��B�^�X�N�Ɨ�������N�������ꍇ�́A�G���[�R�[�h E_CTX ���
-	���܂��B
+	　定義可能な例外ハンドラは、ter_tsk によるタスクの終了ハンドラの
+	みです。タスク独立部から起動した場合は、エラーコード E_CTX を返
+	します。
 
-	�����̓_�́A�n���h�u�b�N�����Q�Ƃ��������B
+	※他の点は、ハンドブックをご参照ください。
 
 <a name="part318"></a>
-<h3>	3-18. ���^�X�N�����I�� (ter_tsk)
+<h3>	3-18. 他タスク強制終了 (ter_tsk)
 </h3>
 
-	���n���h�u�b�N�����Q�Ƃ��������B
+	※ハンドブックをご参照ください。
 
 <a name="part319"></a>
-<h3>	3-19. �^�X�N�̋N���v���𖳌��� (can_wup)
+<h3>	3-19. タスクの起床要求を無効化 (can_wup)
 </h3>
 
-	���n���h�u�b�N�����Q�Ƃ��������B
+	※ハンドブックをご参照ください。
 
 <a name="part320"></a>
-<h3>	3-20. ���荞�݃n���h�����A�ƃ^�X�N�N�� (ret_wup)
+<h3>	3-20. 割り込みハンドラ復帰とタスク起床 (ret_wup)
 </h3>
 
-	���n���h�u�b�N�����Q�Ƃ��������B
+	※ハンドブックをご参照ください。
 
 <a name="part321"></a>
-<h3>	3-21. ���荞�݃n���h����` (def_int)
+<h3>	3-21. 割り込みハンドラ定義 (def_int)
 </h3>
-	�y�⑫�����z
+	【補足事項】
 
-	�@���荞�݃n���h����ÓI�ɒ�`����ꍇ�́A���̃V�X�e��
-	�R�[�����g�p����K�v�͂���܂���B���I�Ɋ��荞�݃n���h
-	�����`�������ꍇ�Ɏg�p���܂��B
+	　割り込みハンドラを静的に定義する場合は、このシステム
+	コールを使用する必要はありません。動的に割り込みハンド
+	ラを定義したい場合に使用します。
 
-	�@pk_dint�̃p�P�b�g�`���̒ǉ������ointtbl�́A���荞��
-	�e�[�u���̐擪�A�h���X���i�[���܂��B���荞�݃A�h���X��
-	�ÓI�ɒ�`���Ă���ꍇ�� NULL �Ƃ��܂��B(NADR�ł͂Ȃ�)
-	�܂��A�ǉ������ointini�� NULL (�������NADR�ł͂Ȃ�)��
-	�����ꍇ�́A���荞�ݏ��������[�`���Ƃ��āAdef_int�̂�
-	������Ăяo���܂��B
+	　pk_dintのパケット形式の追加メンバinttblは、割り込み
+	テーブルの先頭アドレスを格納します。割り込みアドレスを
+	静的に定義している場合は NULL とします。(NADRではない)
+	また、追加メンバintiniが NULL (こちらもNADRではない)で
+	無い場合は、割り込み初期化ルーチンとして、def_intのな
+	かから呼び出します。
 
-	�@���Apk_dint=NADR=(-1)�Ƃ��Ă����荞�݃n���h���̒�`
-	�����͍s���܂���̂ŁA�����ӂ��������B
+	　尚、pk_dint=NADR=(-1)としても割り込みハンドラの定義
+	解除は行われませんので、ご注意ください。
 
-	�����̓_�́A�n���h�u�b�N�����Q�Ƃ��������B
+	※他の点は、ハンドブックをご参照ください。
 
-	�y������z
+	【実装例】
 
-	�@�ȉ��͗�ł����A����ł��̂ł��܂��s���Ȃ���������
-	�܂���B
+	　以下は例ですが、机上ですのでうまく行かないかもしれ
+	ません。
 
-	; ���荞�݃x�N�^
+	; 割り込みベクタ
 		.section	V, CODE, ALIGN=2
 		.org	xxxx
 		.data.l	int_000
@@ -365,7 +365,7 @@
 		.org	yyyy
 		.data.l	int_001
 
-	; ���荞�݃e�[�u��
+	; 割り込みテーブル
 		.section	D, DATA, ALIGN=2
 		.align	2
 		.export	_int_tbl
@@ -373,34 +373,34 @@
 	int_000	.res.l	1
 	int_001	.res.l	1
 
-	/* ���荞�݃n���h�� */
+	/* 割り込みハンドラ */
 	#pragma interrupt int_yyy
 	void int_yyy( void )
 	{
-		vbgn_int();	/* �K�{ */
+		vbgn_int();	/* 必須 */
 		/*
-		�����ŁA�K�v������Ί����ݗv���t���O����
+		ここで、必要があれば割込み要求フラグ解除
 		*/
 		/*
-		�����ŁA���ۂ̏���
+		ここで、実際の処理
 		*/
-		ret_int();	/* �K�{�i�܂���ret_wup(zz)�j */
+		ret_int();	/* 必須（またはret_wup(zz)） */
 	}
-	/* ���荞�݂̏����� */
+	/* 割り込みの初期化 */
 	void int_yyy_ini( void )
 	{
 		/*
-		�����ŁA���荞�݂̏�����
+		ここで、割り込みの初期化
 		*/
 	}
 
-	/* ��` */
+	/* 定義 */
 	#define INT_001 1
 	extern FP int_tbl[];
 	T_DINT dint;
 
 		/*
-		�Ȃɂ������̏���
+		なにがしかの処理
 		*/
 		dint.intatr = TA_HLNG;
 		dint.inthdr = int_yyy;
@@ -408,176 +408,176 @@
 		dint_intini = int_yyy_ini;
 		def_int( INT_001, &dint );
 		/*
-		�Ȃɂ������̏���
+		なにがしかの処理
 		*/
 
 
 <a name="part4"></a>
-<h2>	�S�D�z�z���e
+<h2>	４．配布内容
 </h2>
 <a name="part41"></a>
-<h3>	4-1. �J�[�l���ikernel.obj, kernel.h, kernel.htm�j
+<h3>	4-1. カーネル（kernel.obj, kernel.h, kernel.htm）
 </h3>
-	�@�J�[�l���{�̂Ƃ��̃w�b�_�t�@�C���Ƃ��̃t�@�C���ł��B
+	　カーネル本体とそのヘッダファイルとこのファイルです。
 
 <a name="part42"></a>
-<h3>	4-2. �b�o�t�̂b�b�q����֐��imachine.obj, machine.h�j
+<h3>	4-2. ＣＰＵのＣＣＲ操作関数（machine.obj, machine.h）
 </h3>
-	�@�b�o�t�̂b�b�q����֐��Ƃ��̃w�b�_�t�@�C���ł��B
+	　ＣＰＵのＣＣＲ操作関数とそのヘッダファイルです。
 
-	�@AKI-H8�}�C�R����p�b�R���p�C���ɂ́A�b�b�q����֐����܂܂��
-	���Ȃ������̂ŁA�ꕔ�g�����č쐬���܂����B
+	　AKI-H8マイコン専用Ｃコンパイラには、ＣＣＲ操作関数が含まれて
+	いなかったので、一部拡張して作成しました。
 
-	�@set_ccr : �b�b�q���Z�b�g
-	�@get_ccr : �b�b�q�̏�Ԃ��擾
-	�@and_ccr : �b�b�q���A���h�Z�b�g
-	�@or_ccr : �b�b�q���I�A�Z�b�g
-	�@xor_ccr : �b�b�q���G�N�X�N���[�V�u�I�A�Z�b�g
+	　set_ccr : ＣＣＲをセット
+	　get_ccr : ＣＣＲの状態を取得
+	　and_ccr : ＣＣＲをアンドセット
+	　or_ccr : ＣＣＲをオアセット
+	　xor_ccr : ＣＣＲをエクスクルーシブオアセット
 
-	�@get_and_ccr : �b�b�q���A���h�Z�b�g�i����O�̂b�b�q�̏�Ԃ��擾�j
-	�@get_or_ccr : �b�b�q���I�A�Z�b�g�i����O�̂b�b�q�̏�Ԃ��擾�j
-	�@get_xor_ccr : �b�b�q���G�N�X�N���[�V�u�I�A�Z�b�g
-			�i����O�̂b�b�q�̏�Ԃ��擾�j
+	　get_and_ccr : ＣＣＲをアンドセット（操作前のＣＣＲの状態を取得）
+	　get_or_ccr : ＣＣＲをオアセット（操作前のＣＣＲの状態を取得）
+	　get_xor_ccr : ＣＣＲをエクスクルーシブオアセット
+			（操作前のＣＣＲの状態を取得）
 
 <a name="part43"></a>
-<h3>	4-3. �k�b�c�\���h���C�o�ilcddrv.obj, lcddrv.h�j
+<h3>	4-3. ＬＣＤ表示ドライバ（lcddrv.obj, lcddrv.h）
 </h3>
-	�@�k�b�c�̕\���h���C�o�ƃw�b�_�t�@�C���ł��B
+	　ＬＣＤの表示ドライバとヘッダファイルです。
 
-	�@���̃h���C�o�ł́A���ԑ҂��� dly_tsk �V�X�e���R�[�����g�p
-	���Ă��܂��̂ŁA�J�[�l���̏�������Ɏ��s����l�ɂ��Ă��������B
+	　このドライバでは、時間待ちを dly_tsk システムコールを使用
+	していますので、カーネルの初期化後に実行する様にしてください。
 
-	�@�Ή�����R�[�h
+	　対応制御コード
 
-		0x0d (CR) ���A
-		0x0a (LF) ���s
+		0x0d (CR) 復帰
+		0x0a (LF) 改行
 
-		�� �Q�s�ڂ̍ŏI�𒴂����ꍇ�́A�����I�ɕ��A���s���܂��B
+		※ ２行目の最終を超えた場合は、自動的に復帰改行します。
 
-	�@�G�X�P�[�v�E�V�[�P���X
+	　エスケープ・シーケンス
 
-		�J�[�\���ړ��iESC=lc�j	�J�[�\�������s���J�����Ɉړ������܂��B
-					�p�����[�^���Ƃ��́A�o�C�i����0x20��
-					�I�t�Z�b�g��t���Ďw�肵�܂��B
-					�P�s�ڂ̂P�J�����̎w��͕�����\�L�ŁA
-					"\x1b=\x21\x21" �ƂȂ�܂��B
-					�R�s�ڈȏ�܂��͂S�O�J�����ȏ�̎w��
-					�͂��ꂼ��P�s�ځA�P�J�����ɂȂ�܂��B
+		カーソル移動（ESC=lc）	カーソルをｌ行ｃカラムに移動させます。
+					パラメータｌとｃは、バイナリで0x20の
+					オフセットを付けて指定します。
+					１行目の１カラムの指定は文字列表記で、
+					"\x1b=\x21\x21" となります。
+					３行目以上または４０カラム以上の指定
+					はそれぞれ１行目、１カラムになります。
 
-		�b�f�q�`�l��`�iESCCa�j	�b�f�q�`�l�̃A�h���Xa���瑱���f�[�^��
-					�������݂܂��B
-					�A�h���X�́A�o�C�i����0x40�̃I�t�Z�b�g
-					��t���Ďw�肵�܂��B
-					�p�^�[���f�[�^�́A�l�r�a���P�Ƃ��ė^��
-					�܂��B�i����R�[�h�̉���j
-					�f�[�^�Ƃ��� 0xff ��^����Ƃ��̃V�[�P
-					���X���I�����āA�ȍ~�͂c�c�q�`�l�ւ̒�
-					��\���ƂȂ�܂��B�i �L�����N�^�R�[�h
-					�� 0x80 ���� 0x87 �ł��B�j
-					�b�f�q�`�l�̂O���N���A����ɂ́A������
-					�\�L�ŁA"\x1bC\x40\x80\x80\x80\x80\x80
-					\x80\x80\x80\xff" �ƂȂ�܂��B
+		ＣＧＲＡＭ定義（ESCCa）	ＣＧＲＡＭのアドレスaから続くデータを
+					書き込みます。
+					アドレスは、バイナリで0x40のオフセット
+					を付けて指定します。
+					パターンデータは、ＭＳＢを１として与え
+					ます。（制御コードの回避）
+					データとして 0xff を与えるとこのシーケ
+					ンスを終了して、以降はＤＤＲＡＭへの通
+					常表示となります。（ キャラクタコード
+					は 0x80 から 0x87 です。）
+					ＣＧＲＡＭの０をクリアするには、文字列
+					表記で、"\x1bC\x40\x80\x80\x80\x80\x80
+					\x80\x80\x80\xff" となります。
 
-	�@���̐���R�[�h�ɑΉ����Ă��܂���B�܂��A�������ł��B
+	　他の制御コードに対応していません。まだ、未完成です。
 
-	�@lcd_ini : ������
-	�@lcd_putc : �ꕶ���o��
-	�@lcd_puts : ������o��
+	　lcd_ini : 初期化
+	　lcd_putc : 一文字出力
+	　lcd_puts : 文字列出力
 
 <a name="part44"></a>
-<h3>	4-4. �Z�b�g�A�b�v�isetup.mar, system.h, ioregs.h�j
+<h3>	4-4. セットアップ（setup.mar, system.h, ioregs.h）
 </h3>
-	�@�Z�b�g�A�b�v�v���O�����\�[�X�Ɗe���`�w�b�_�t�@�C���ł��B
+	　セットアッププログラムソースと各種定義ヘッダファイルです。
 
 <a name="part45"></a>
-<h3>	4-5. �T���v���t�@�C���imain.c, makefile�j
+<h3>	4-5. サンプルファイル（main.c, makefile）
 </h3>
-	�T���v���\�[�X�Ɛ����p���C�N�t�@�C���ł��B�@
+	サンプルソースと生成用メイクファイルです。　
 
 <a name="part5"></a>
-<h2>	�T�D�g�ݍ��ݎ菇
+<h2>	５．組み込み手順
 </h2>
-	�@�Y�t�T���v�� (setup.mar, main.c, makefile) ���������������B
+	　添付サンプル (setup.mar, main.c, makefile) をご覧ください。
 
 <a name="part6"></a>
-<h2>	�U�D���ӎ���
+<h2>	６．注意事項
 </h2>
-	�@�f�o�b�N�͍s���Ă��܂���̂ŁA���g�p�ɓ������Ă͏\������
-	�ӊ肢�܂��B���̃\�t�g�E�G�A���g�p�������Ƃɂ�邷�ׂĂ̑�
-	�Q�ɂ��āA��҂͈�؂��̐ӔC�𕉂�Ȃ����̂Ƃ��܂��B
+	　デバックは行っていませんので、ご使用に当たっては十分ご注
+	意願います。このソフトウエアを使用したことによるすべての損
+	害について、作者は一切その責任を負わないものとします。
 
 <a name="part7"></a>
-<h2>	�V�D���̑�
+<h2>	７．その他
 </h2>
-	�@���̃v���O�����́A���쌠��������Ă��Ȃ��u�t���[�\�t�g�E
-	�G�A�v�ł��B���ӎ������\�����m�F�̏�A���R�Ɏg�p���Ă�����
-	���Ă��܂��܂���B
+	　このプログラムは、著作権を放棄していない「フリーソフトウ
+	エア」です。注意事項を十分ご確認の上、自由に使用していただ
+	いてかまいません。
 
-<h3>	7-1 �A����
+<h3>	7-1 連絡先
 </h3>
-	�@���̃v���O�����ɑ΂���A���ӌ��A���v�]�A������A�����z�A
-	�o�O���Ȃǂ������܂����牺�L�̈���܂Ń��[�������肢�v��
-	�܂��B���A�������A���ӌ��A���v�]�A������́A�z�[���y�[�W��
-	�ŁA���J���邱�Ƃ�����܂��̂ŁA�\�߂��������������B
+	　このプログラムに対する、ご意見、ご要望、ご質問、ご感想、
+	バグ情報などございましたら下記の宛先までメールをお願い致し
+	ます。尚、頂いた、ご意見、ご要望、ご質問は、ホームページ上
+	で、公開することもありますので、予めご了承ください。
 
 		AKIYA	e-mail:aki_chi@live.jp
 
-<h3>	7-2 ����
+<h3>	7-2 履歴
 </h3>
 	rel.0.07a	2000/2/27
 
-	�E�w�b�_ kernel.h �̒�`(FP)��ύX�B
-	�E�Y�t lcddrv.obj �̕����R�[�hH'A0�`H'FF�̕����������C���B
-	�E�Y�t ioregs.h ��D/A�֘A���W�X�^��`���C���B
-	�E�Y�t main.c �̃w�b�_�ύX�ɂ�郏�[�j���O���C���B
+	・ヘッダ kernel.h の定義(FP)を変更。
+	・添付 lcddrv.obj の文字コードH'A0～H'FFの文字化けを修正。
+	・添付 ioregs.h のD/A関連レジスタ定義を修正。
+	・添付 main.c のヘッダ変更によるワーニングを修正。
 
 	rel.0.07	1999/7/31
 
-	�E�V�X�e���R�[���� ret_int ���}�N������֐��ɕύX�B
-	�E�V�X�e���R�[���� ret_wup ���T�|�[�g�B
-	�E�^�X�N�Ɨ�������Ăяo���\�ȃV�X�e���R�[���ɂ���
-	�@�Ăяo����悤�ɏC���B�i���荞�݃��[�`�������j
+	・システムコールの ret_int をマクロから関数に変更。
+	・システムコールの ret_wup をサポート。
+	・タスク独立部から呼び出し可能なシステムコールについて
+	　呼び出せるように修正。（割り込みルーチン向け）
 
 	rel.0.06c	1999/5/23
 
-	�E�V�X�e���R�[���� dis_dsp �Ńf�B�X�p�b�`���֎~�����ɂ�
-	�@������炸�A�f�B�X�p�b�`�����s����Ă��܂��̂��C���B
+	・システムコールの dis_dsp でディスパッチを禁止したにも
+	　かかわらず、ディスパッチが実行されてしまうのを修正。
 
 	rel.0.06b	1999/3/13
 
-	�E�V�X�e���R�[���� wup_tsk �̕s����C���B
+	・システムコールの wup_tsk の不具合を修正。
 
 	rel.0.06a	1999/2/11
 
-	�E�V�X�e���R�[���� can_wup �̕s����C���B
+	・システムコールの can_wup の不具合を修正。
 
 	rel.0.06	1999/2/6
 
-	�E�V�X�e���R�[���� can_wup ���T�|�[�g�B
+	・システムコールの can_wup をサポート。
 
 	rel.0.05	1998/11/22
 
-	�E�V�X�e���R�[���� def_exc, ter_tsk ���T�|�[�g�B
+	・システムコールの def_exc, ter_tsk をサポート。
 
 	rel.0.04	1998/11/3
 
-	�E�^�X�N�̍폜�ŃX�^�b�N���J������悤�ɕύX�B
-	�Eexd_tsk �Ń^�X�N���폜����Ȃ��̂��C���B
+	・タスクの削除でスタックを開放するように変更。
+	・exd_tsk でタスクが削除されないのを修正。
 
 	rel.0.03	1998/10/11
 
-	�E�f�B�X�p�b�`���W�b�N���C���B
-	�E�V�X�e���R�[���� ext_tsk, exd_tsk ���T�|�[�g�B
-	�E�f�B�X�p�b�`�֎~��Ԃ� get_tid �����s����� FALSE ��Ԃ��̂��C���B
+	・ディスパッチロジックを修正。
+	・システムコールの ext_tsk, exd_tsk をサポート。
+	・ディスパッチ禁止状態で get_tid を実行すると FALSE を返すのを修正。
 
 	rel.0.02	1998/9/27
 
-	�E�X�^�b�N�A�N���b�N�l���O���ϐ��Ƃ��ăJ�[�l���Ɏw������\���ɕύX�B
-	�E�g�p����^�C�}�[��I���ł���悤�ɕύX�B
-	�E�V�X�e���R�[���� rot_rdq ���T�|�[�g�B
-	�E�^�X�N�N�����ɐ���I���R�[�h�� E_OBJ �ɂȂ��Ă����̂� E_OK �ɏC���B
+	・スタック、クロック値を外部変数としてカーネルに指示する構造に変更。
+	・使用するタイマーを選択できるように変更。
+	・システムコールの rot_rdq をサポート。
+	・タスク起動時に正常終了コードが E_OBJ になっていたのを E_OK に修正。
 
-	rel.0.01	1998/9/15	���J
+	rel.0.01	1998/9/15	公開
 
 </pre>
 </body>

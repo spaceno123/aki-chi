@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang="ja">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=shift_jis">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <meta http-equiv="Content-Script-Type" content="text/javascript">
 <title>38.4kbps to 31.25kbps convertor used AKI-H8</title>
@@ -13,42 +13,42 @@
 38.4kbps to 31.25kbps convertor used AKI-H8
 </font>
 <hr>
-�H���Ŕ�������Ă���}�C�R���{�[�h AKI-H8 ���g���āA
-�]�����[�g�ϊ��i38.4kbps ���|�� 31.25kbps�j�����邾���D�D�D
+秋月で発売されているマイコンボード AKI-H8 を使って、
+転送レート変換（38.4kbps ＜－＞ 31.25kbps）をするだけ．．．
 </div>
 
 <br>
 <div style="padding-left:2em">
-<STRONG>���T�v��</STRONG>
+<STRONG>＜概要＞</STRONG>
 <p style="padding-left:2em">
-�@���̃v���O�����́A�q�r�|�Q�R�Q�b�|�[�g�̂R�W�D�S��������
-�̓]�����[�g���R�P�D�Q�T���������̓]�����[�g�Ƀ��[�g�ϊ�����
-�����̂��̂ł��B�R�W�D�S������������R�P�D�Q�T���������ւ̕ϊ�
-�ł́A�I�[�o�[�t���[���邱�Ƃ�����܂��̂ŁA�����ӂ��������B
-<br>�@�܂��AAE-H8MB ��O��Ƃ��Ė��ڑ��[�q�͑S�ďo�̓|�[�g�ɂ�
-�Ă��܂��̂ŁA���ڑ��[�q����������Ă�����͎g�p���Ȃ��ł��������B
-�i�\�[�X�����J������̕��G�ȃR�[�h�ł͂���܂���̂ŁD�D�D�j
+　このプログラムは、ＲＳ－２３２Ｃポートの３８．４ｋｂｐｓ
+の転送レートを３１．２５ｋｂｐｓの転送レートにレート変換する
+だけのものです。３８．４ｋｂｐｓから３１．２５ｋｂｐｓへの変換
+では、オーバーフローすることもありますので、ご注意ください。
+<br>　また、AE-H8MB を前提として未接続端子は全て出力ポートにし
+ていますので、未接続端子を結線されている方は使用しないでください。
+（ソースを公開する程の複雑なコードではありませんので．．．）
 </p>
 
-<STRONG>���@�\��</STRONG>
+<STRONG>＜機能＞</STRONG>
 <ul>
-<li>RXD1��38.4kbps�̎�M�f�[�^��TXD0��31.25kbps�ő��o
-<li>RXD1�̎�M��LED1�ŕ\��
-<li>RXD1�̎�M�f�[�^�`�����l����LCD��i�ɕ\��
-<li>RXD0��31.25kbps�̎�M�f�[�^��TXD1��38.4kbps�ő��o
-<li>RXD0�̎�M��LED2�ŕ\��
-<li>RXD0�̎�M�f�[�^�`�����l����LCD���i�ɕ\��
+<li>RXD1の38.4kbpsの受信データをTXD0に31.25kbpsで送出
+<li>RXD1の受信をLED1で表示
+<li>RXD1の受信データチャンネルをLCD上段に表示
+<li>RXD0の31.25kbpsの受信データをTXD1に38.4kbpsで送出
+<li>RXD0の受信をLED2で表示
+<li>RXD0の受信データチャンネルをLCD下段に表示
 </ul>
 
-<STRONG>���Q�l��</STRONG>
+<STRONG>＜参考＞</STRONG>
 <ul>
-<li>31.25kbps ���̉�H��
-<br>�@�i���L��H�́A�K�i�ɍ��v���Ă��܂���
-�̂ŁA�e���̐ӔC�ɂ����Ă��g�p���������B�ň��A�ڑ�������̋@��
-��j�󂷂鋰�ꂪ����܂��B�j
+<li>31.25kbps 側の回路例
+<br>　（下記回路は、規格に合致していません
+ので、各自の責任においてご使用ください。最悪、接続した先の機器
+を破壊する恐れがあります。）
 <pre>
 <tt>
-�����M
+●送信
 
 _________   A     K   560    4 ___________
 TXD0(4-7) ---(|&gt;|)---^v^v^v---|           |          
@@ -57,7 +57,7 @@ TXD0(4-7) ---(|&gt;|)---^v^v^v---|           |
                       220    5| 1,3pin:NC |          
  GND(4-2) -----------^v^v^v---|___________|          
 
-����M
+●受信
 
 _________   560  Inv  560 4 _______ 3                           5 ___________
 RXD0(4-5) ---V---o&lt;|---V---|       |- NC  *----------------------|           |
@@ -74,7 +74,7 @@ RXD0(4-5) ---V---o&lt;|---V---|       |- NC  *----------------------|           
 
 </ul>
 
-<STRONG>�_�E�����[�h</STRONG>
+<STRONG>ダウンロード</STRONG>
 <ul>
 <li><a href="../download/rsmid02.lzh">38.4kbps to 31.25kbps convertor Ver. 0.02</a>
 (rsmid.mot) up date 1999/5/23
@@ -92,11 +92,11 @@ RXD0(4-5) ---V---o&lt;|---V---|       |- NC  *----------------------|           
 </div>
 <!--<img src="/cgi-bin/Count.cgi?sh=N|df=akichi.count4.dat">-->
 <div style="text-align:right;">
-<!--QLOOK�A�N�Z�X���-->
+<!--QLOOKアクセス解析-->
 <!--
-<a href="http://analytics.qlook.net/" target="_blank"><img src="http://akichi.analytics.qlook.net/counter.png" id="akichi.analytics.qlook.net" alt="QLOOK�A�N�Z�X���" width="80" height="15" border="0" /></a><script type="text/javascript" src="http://akichi.analytics.qlook.net/analyze.js" charset="UTF-8"></script><noscript><div><iframe src="http://akichi.analytics.qlook.net/analyze.html" title="QLOOK�A�N�Z�X���" style="width:0;height:0;"><img src="http://akichi.analytics.qlook.net/analyze.gif?guid=ON" alt="QLOOK�A�N�Z�X���" width="1" height="1" /></iframe></div></noscript>
+<a href="http://analytics.qlook.net/" target="_blank"><img src="http://akichi.analytics.qlook.net/counter.png" id="akichi.analytics.qlook.net" alt="QLOOKアクセス解析" width="80" height="15" border="0" /></a><script type="text/javascript" src="http://akichi.analytics.qlook.net/analyze.js" charset="UTF-8"></script><noscript><div><iframe src="http://akichi.analytics.qlook.net/analyze.html" title="QLOOKアクセス解析" style="width:0;height:0;"><img src="http://akichi.analytics.qlook.net/analyze.gif?guid=ON" alt="QLOOKアクセス解析" width="1" height="1" /></iframe></div></noscript>
 -->
-<!--/QLOOK�A�N�Z�X���-->
+<!--/QLOOKアクセス解析-->
 </div>
 
 </body>
