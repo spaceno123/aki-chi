@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<title>Serial Downloader for RT1010</title>
+</head>
+<body bgcolor="#c0c0e0" text="#000000" link="#0000ff" vlink="#800080" alink="#ff0000">
+<div align="center">
+<hr>
+<font size="+2">
+Serial Downloader for RT1010
+</font>
+<hr>
+</div>
+
+<br>
+<div style="padding-left:2em">
+
+<STRONG>＜概要＞</STRONG>
+<p style="padding-left:2em">
+このページは、シリアルダウンローダーが起動している状態のボードへプログラムをRAM上へ送信して実行する一例となります。
+</p>
+
+<STRONG>＜補足＞</STRONG>
+<p style="padding-left:2em">
+実行プログラムデータの作成は flashloader の作成手順が参考となります。<br>
+(MCUBootUtility が flashloader をロードしてジャンプしている動作を真似ています。)
+</p>
+
+<STRONG>＜準備＞</STRONG>
+<ol>
+    <li>
+        実行プログラムデータの作成に必要な elftosb.exe を入手します。<br>
+        例えばこちらから-><a href="https://github.com/nxp-mcuxpresso/mcu-boot-utility/releases/tag/v3.4.0">NXP-MCUBootUtility v3.4.0 release</a>
+        （なお、MCUBootUtilityの最新はこちらの様です->
+        <a href="https://github.com/JayHeng/NXP-MCUBootUtility/releases/tag/v6.3.0">NXP-MCUBootUtility v6.3.0 release</a>）<br>
+        elftosb.exe は tools/elftosb5/win にあります。<br><br>
+    </li>
+    <li>
+        <a href="./imx-dtcm-unsigned.bd">imx-dtcm-unsigned.bd</a>を作成します。<br>
+        SDK の middleware/mcu_bootloader/bin/Tools/bd_file/imxrt101x の imx-flashloader-unsigned.bd を元に、<br>
+        startAddress を 0x20000000 にして、entryPointAddress の行をコメントアウトします。<br>
+        <iframe src="./imx-dtcm-unsigned.bd" title="imx-dtcm-unsigned.bd" width="50%"></iframe>
+    </li>
+</ol>
+
+<STRONG>＜手順＞</STRONG>
+<ul>
+    <li>
+        実行プログラムの作成
+        <br>ここでは SDK の example の demo_app の iled_blinky を使用します。<br><br>
+        <ol>
+            <li>
+                Import SDK example(s)... で、demo_app の iled_blinky をインポートします。<br><br>
+            </li>
+            <li>
+                property > C/C++ Build > MCU Settiongs > Memory details で、<br>
+                SRAM_DTCM の開始アドレスを 0x20000200 にして、サイズを 0x7e00 にします。（容易に進める為）<br><br>
+            </li>
+            <li>
+                property > C/C++ Build > Settiongs > Tool Settings > MCU C compiler > Preprocessor で、<br>
+                XIP_EXTERNAL_FLASH=0, XIP_BOOT_HEADER_ENABLE=0 にします。<br><br>
+            </li>
+            <li>
+                property > C/C++ Build > Settiongs > Tool Settings > MCU Linker > Managed Linker Script で、<br>
+                Link application to RAM のチェックボックスをチェックします。<br><br>
+            </li>
+            <li>
+                ビルドします。<br><br>
+            </li>
+            <li>
+                作成された Binaries > evkmimxrt1010_iled_blinket.axf と<bR>
+                elftosb.exe と imx-dtcm-unsigned.bd ファイルを、同一フォルダに置いて、<br>
+                コマンドラインで次のように実行します。<br><br>
+                elftosb.exe -f imx -V -c imx-dtcm-unsigned.bd -o evkmimxrt1010_iled_blinky.bin evkmimxrt1010_iled_blinky.axf<br><br>
+            </li>
+            <li>
+                作成された evkmimxrt1010_iled_blinky.bin がロードするプログラムです。
+            </li>
+        </ol>
+    </li>
+</ul>
+
+<ul>
+    <li>
+        ロードプログラムの作成
+        <br>ここでは Visual Studio 2022 を使用してコンソールアプリを作成します。<br><br>
+        <ol>
+            <li>
+                Visual Studio 2022 の新しいプロジェクトの作成でコンソールアプリケーションのプロジェクトを作ります。<br><br>
+            </li>
+            <li>
+                <a href="./LoadRunner.cpp">プログラム</a>を次の様に編集します。<br>
+                <iframe src="./LoadRunner.cpp" title="LoadRunner.cpp" width="90%">LoadRunner.cpp</iframe><br><br>
+            </li>
+            <li>
+                ビルドします。<br><br>
+            </li>
+            <li>
+                作成されたプログラム（ここでは LoadRunner.exe）が流し込み役のプログラムです。
+            </li>
+        </ol>
+    </li>
+</ul>
+
+<ul>
+    <li>
+        ロード実行
+        <br>ここでは、ロードプログラムで実行プログラムを転送実行する手順を示します。<br><br>
+        <ol>
+            <li>
+                EVK ボードの SW8 を Serial Downloader: 0001 にセットして、<br>
+                Debug USB ポート J41 と PC とを繋ぎます。<br><br>
+            </li>
+            <li>
+                流し込み役のプログラムと実行プログラムを同一フォルダに置いて、<br>
+                コマンドラインで次のように実行します。（com3 の部分は環境に応じて変えてください。）<br><br>
+                LoadRunner.exe com3 0x20000000 evkmimxrt1010_iled_blinky.bin<br><br>
+            </li>
+            <li>
+                EVK ボードの USER LED が点滅すれば成功です。
+            </li>
+        </ol>
+    </li>
+</ul>
+
+<STRONG>＜ご注意＞</STRONG>
+<ul>
+    <li>
+        EVK の USB OTG ポート J9 が PC 接続されていると Serial Downloader が USB HID で有効化されてしまいますので、<br>
+        UART 接続の Serial Download が出来なくなります。<br>
+        Reference Manual では、Poll LPUART 1 > Poll USB OTG1 の順のフローチャートが書かれていますが、<br>
+        タイミングについては記載されていないので、USB が接続されていると UART での流し込みができるのかどうか？。<br>
+        （RT1010のみリセットがかかってしまった時など。）<br><br>
+    </li>
+    <li>
+        Reference Manual では、9.1 Chip-specific Boot Information に LPUART として、LPUART1_TX(GPIO_10)<br>
+        LPUART1_RX(GPIO_09)のみリストされていますが、Data Sheet の方では、5.2 Boot device interface allocation で、<br>
+        lpuart1.CTS_B(GPIO_08)、lpuart1.RTS_B(GPIO_07)が加えられています。EVK では CTS, RTS 信号は CODEC に繋げられていて、<br>
+        特にケアされていない様子で、 UART の Serial Downloader も動いてはいるので実際はどうなのかしら？。<br>
+        （RTSは出力なので信号がぶつかるのは嫌だし、CTSがネゲートされていて応答が返らないことがあるのかとか。）<br><br>
+    </li>
+</ul>
+
+</div>
+
+<hr>
+<div style="float:left;">
+<a href="./../../index.html">Home</a>
+&gt;
+<a href="./../rt1010.html">for MIMXRT1010-EVK</a>
+&gt;
+Serial Downloader for RT1010
+</div>
+
+</body>
+
+</html>
