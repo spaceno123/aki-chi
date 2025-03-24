@@ -157,11 +157,12 @@ uint32_t getFileSize(FILE* fp)
     return size;
 }
 
-int LoadRunner(char* com, char* ladr, char* lfile)
+int LoadRunner(char* com, char* ladr, char *jadr, char* lfile)
 {
     int ret = 0;
     wchar_t* scom = new wchar_t[sizeof(com)+1];
     uint32_t load_address = strtoul(ladr, nullptr, 0);
+    uint32_t jump_address = strtoul(jadr, nullptr, 0);
 
     size_t convertedChars = 0;
     mbstowcs_s(&convertedChars, scom, sizeof(com) + 1, com, _TRUNCATE);
@@ -250,7 +251,7 @@ int LoadRunner(char* com, char* ladr, char* lfile)
     send_data(hComm, filesize, fp);
     recv_result(hComm);   // 56 78 78 56 88 88 88 88
 
-    send_jump_address(hComm, &sdb, load_address);
+    send_jump_address(hComm, &sdb, jump_address);
     recv_result(hComm);   // 56 78 78 56
 
     fclose(fp);
@@ -263,13 +264,13 @@ int main(int argc, char **argv)
 {   // load-address jump-address load-file
     std::cout << "*** Load Runner ***\n";
 
-    if (argc == 4)
+    if (argc == 5)
     {
-        return LoadRunner(argv[1], argv[2], argv[3]);
+        return LoadRunner(argv[1], argv[2], argv[3], argv[4]);
     }
     else
     {
-        std::cout << "usage:>LoadRunner com-port load-address load-bin-file\n";
+        std::cout << "usage:>LoadRunner com-port load-address ivt-address load-bin-file\n";
     }
     return -1;
 }

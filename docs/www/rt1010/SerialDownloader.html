@@ -26,25 +26,10 @@ Serial Downloader for RT1010
 <STRONG>＜補足＞</STRONG>
 <p style="padding-left:2em">
 実行プログラムデータの作成は flashloader の作成手順が参考となります。<br>
-(MCUBootUtility が flashloader をロードしてジャンプしている動作を真似ています。)
+(MCUBootUtility が flashloader をロードしてジャンプしている動作を真似ています。)<br><br>
+しかしながら、elftosb.exe の使用は、.ld ファイルの編集無しでは .data セクションを吐き出さないので、<br>
+簡単化のために直接 Image Vector Table と Boot Data を埋め込む方法にしました。(2025/3/24 変更点)
 </p>
-
-<STRONG>＜準備＞</STRONG>
-<ol>
-    <li>
-        実行プログラムデータの作成に必要な elftosb.exe を入手します。<br>
-        例えばこちらから-><a href="https://github.com/nxp-mcuxpresso/mcu-boot-utility/releases/tag/v3.4.0">NXP-MCUBootUtility v3.4.0 release</a>
-        （なお、MCUBootUtilityの最新はこちらの様です->
-        <a href="https://github.com/JayHeng/NXP-MCUBootUtility/releases/tag/v6.3.0">NXP-MCUBootUtility v6.3.0 release</a>）<br>
-        elftosb.exe は tools/elftosb5/win にあります。<br><br>
-    </li>
-    <li>
-        <a href="./imx-dtcm-unsigned.bd.txt">imx-dtcm-unsigned.bd</a>を作成します。<br>
-        SDK の middleware/mcu_bootloader/bin/Tools/bd_file/imxrt101x の imx-flashloader-unsigned.bd を元に、<br>
-        startAddress を 0x20000000 にして、entryPointAddress の行をコメントアウトします。<br>
-        <iframe src="./imx-dtcm-unsigned.bd.txt" title="imx-dtcm-unsigned.bd" width="50%"></iframe>
-    </li>
-</ol>
 
 <STRONG>＜手順＞</STRONG>
 <ul>
@@ -56,8 +41,8 @@ Serial Downloader for RT1010
                 Import SDK example(s)... で、demo_app の iled_blinky をインポートします。<br><br>
             </li>
             <li>
-                property > C/C++ Build > MCU Settiongs > Memory details で、<br>
-                SRAM_DTCM の開始アドレスを 0x20000200 にして、サイズを 0x7e00 にします。（容易に進める為）<br><br>
+                <a href="./ivt_bd.c">ivt_bd.c</a>を source フォルダに作成します。<br>
+                <iframe src="./ivt_bd.c" title="ivt_bd.c" width="50%"></iframe><br><br>
             </li>
             <li>
                 property > C/C++ Build > Settiongs > Tool Settings > MCU C compiler > Preprocessor で、<br>
@@ -71,13 +56,15 @@ Serial Downloader for RT1010
                 ビルドします。<br><br>
             </li>
             <li>
-                作成された Binaries > evkmimxrt1010_iled_blinket.axf と<bR>
-                elftosb.exe と imx-dtcm-unsigned.bd ファイルを、同一フォルダに置いて、<br>
-                コマンドラインで次のように実行します。<br><br>
-                elftosb.exe -f imx -V -c imx-dtcm-unsigned.bd -o evkmimxrt1010_iled_blinky.bin evkmimxrt1010_iled_blinky.axf<br><br>
+                作成された Binaries > evkmimxrt1010_iled_blinket.axf を Project Explorer で右クリックして、<br>
+                Binary Utilities > Create binary を実行します。<br><br>
             </li>
             <li>
-                作成された evkmimxrt1010_iled_blinky.bin がロードするプログラムです。
+                作成された evkmimxrt1010_iled_blinky.bin がロードするプログラムです。<br><br>
+            </li>
+            <li>
+                .map ファイルを参照して、image_vector_table のアドレスを控えておきます。<br>
+                (今回の生成では、0x2000406c でした。)
             </li>
         </ol>
     </li>
@@ -116,8 +103,8 @@ Serial Downloader for RT1010
             </li>
             <li>
                 流し込み役のプログラムと実行プログラムを同一フォルダに置いて、<br>
-                コマンドラインで次のように実行します。（com3 の部分は環境に応じて変えてください。）<br><br>
-                LoadRunner.exe com3 0x20000000 evkmimxrt1010_iled_blinky.bin<br><br>
+                コマンドラインで次のように実行します。（com3 と 0x2000406c の部分は環境、生成に応じて変えてください。）<br><br>
+                LoadRunner.exe com3 0x20000000 0x2000406c evkmimxrt1010_iled_blinky.bin<br><br>
             </li>
             <li>
                 EVK ボードの USER LED が点滅すれば成功です。
